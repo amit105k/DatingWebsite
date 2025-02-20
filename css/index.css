@@ -1,0 +1,355 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    background-color: #fffaf5;
+
+}
+
+
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        url('https://c0.wallpaperflare.com/preview/936/184/58/peopletravel-adventure-dating-holiday.jpg') center/cover no-repeat;
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.hero h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+.btn {
+    background-color: #f39c12;
+    color: #fff;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #e67e22;
+}
+
+.movies {
+    background-color: #2c2c2e;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.movies h2 {
+    margin-bottom: 30px;
+    font-size: 2em;
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+.movie-card {
+    background-color: #3a3a3c;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 200px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+}
+
+.movie-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.movie-card h3 {
+    margin: 15px 0;
+}
+
+
+
+/* dating style is here**/
+.flex {}
+
+.justify-center {
+    justify-content: left !important;
+}
+
+.image-card img {
+    border: 4px solid #2f855a;
+    border-radius: 15px;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+
+/***-------------------------- slider is here**/
+
+
+
+
+body,
+html {
+    height: 100%;
+    width: 100%;
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+    position: relative;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    animation: slide 12s infinite;
+}
+
+@keyframes slide {
+    0% {
+        background-image: url('https://c4.wallpaperflare.com/wallpaper/447/743/751/couple-love-kissing-wallpaper-preview.jpg');
+    }
+
+    33% {
+        background-image: url('https://www.itl.cat/pngfile/big/41-414203_couple-love-silhouette-sunset-romantic-wallpaper-romantic-sun.jpg');
+    }
+
+    66% {
+        background-image: url('https://cdn.pixabay.com/photo/2016/11/29/03/37/couple-1867098_640.jpg');
+    }
+
+    100% {
+        background-image: url('https://cdn.pixabay.com/photo/2015/09/24/17/04/couple-955926_640.jpg');
+    }
+}
+
+
+.navbar {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 50px;
+    /* background: rgba(0, 0, 0, 0.5); */
+    color: #fff;
+    font-size: 18px;
+    z-index: 2;
+}
+
+.navbar a {
+    margin-left: 30px;
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-weight: bolder;
+  font-size: 22px;
+}
+
+.navbar a:hover {
+    color: #ffa500;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px;
+    /* background: rgba(0, 0, 0, 0.5); */
+    opacity: 0.8;
+}
+
+.content h1 {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.content p {
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.content button {
+    padding: 15px 30px;
+    font-size: 20px;
+    background: #ff5722;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.content button:hover {
+    background: #e64a19;
+}
+
+.options {
+    margin-top: 30px;
+}
+
+.option {
+    margin: 10px 0;
+    padding: 10px;
+    background: #fff;
+    color: #000;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.option:hover {
+    background: #ccc;
+}
+
+/**-------------------Compatibility---------------------------------***/
+.Compatibility {
+    color: black;
+    /* display: flex; */
+    text-align: center;
+}
+
+.Compatibility h1 {
+    color: #32825a;
+    font-size: 60px;
+    font-family: "Arima", serif;
+    font-optical-sizing: auto;
+    font-weight: bolder;
+    font-style: normal;
+    margin-top: 7%;
+}
+
+.Compatibility2 {
+    display: flex;
+    width: 60%;
+    margin-left: 21%;
+
+}
+
+.Compatibility2 :first-child {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+
+}
+
+.Compatibility2 :first-child img {
+    width:900px;
+    height: auto;
+    margin-top: 12%;
+}
+
+
+#paragraph{
+    margin-top: 50px;
+}
+#paragraph p{
+    width: 82%;
+    text-align: justify;
+    font-size: 22px;
+}
+#paragraph button{
+    background: linear-gradient(90deg, #ef6054, #f89637);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .25);
+    color: #fffaf5;
+    border-radius: 8px;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+    padding: 9px 36px;
+    float: left;
+    margin-left: 15%;
+    margin-top: 5%;
+    margin-bottom: 3%;
+}
+
+/*------Quality Singles, Just Like You---------*/
+.c-Compatibility {
+    color: black;
+    /* display: flex; */
+    text-align: center;
+}
+
+.c-Compatibility h1 {
+    color: #32825a;
+    font-size: 60px;
+    font-family: "Arima", serif;
+    font-optical-sizing: auto;
+    font-weight: bolder;
+    font-style: normal;
+    margin-top: 7%;
+}
+
+.c-Compatibility2 {
+    display: flex;
+    /* width: 60%; */
+    /* margin-left: 21%; */
+    padding: 10px;
+    margin-top: 50px;
+
+}
+
+.c-Compatibility2 :first-child {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+
+}
+#c-image{
+    width: 40%;
+}
+#c-image img{
+    max-width: none;
+}
+
+.c-Compatibility2 :first-child img {
+    width:900px;
+    height: auto;
+    margin-top: 12%;
+}
+#c-paragraph p{
+    width: 79%;
+    text-align: justify;
+    font-size: 22px;
+    float: left;
+    font-family: "Arima", serif;
+  font-optical-sizing: auto;
+  line-height: 50px;
+}
+#c-paragraph button{
+    background: linear-gradient(90deg, #ef6054, #f89637);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .25);
+    color: #fffaf5;
+    border-radius: 8px;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+    padding: 9px 36px;
+    float: left;
+    margin-left: 15%;
+    margin-top: 5%;
+    margin-bottom: 3%;
+}
