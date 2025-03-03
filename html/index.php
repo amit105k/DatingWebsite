@@ -29,13 +29,13 @@
     <!--- slider are here--------->
     <div class="background"></div>
     <div class="navbar">
-        <a href="#">Tour</a>
-        <a href="#">Dating Advice</a>
+        <a href="tour.php">Tour</a>
+        <a href="datingAdvance.php">Dating Advice</a>
         <a href="#">Singles Near Me</a>
-        <a href="#">Log in</a>
+        <a href="CustLogin.php">Log in</a>
     </div>
     <div class="content">
-        <h1>eharmony</h1>
+        <h1>MovieMingle</h1>
         <h1>Get Who Gets You</h1>
         <p>Start <span style="color: orange;">free</span> today</p>
         <div class="options">
@@ -135,7 +135,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
         <!-- Card 1 -->
         <div class="image-card text-center">
-            <img src="https://www.eharmony.com/wplp/wp-content/uploads/sites/5/2023/11/1-over-2-million-have-found-love.jpg"
+            <img src="https://i.pinimg.com/736x/d6/7c/cf/d67ccf534ca9d5b5ad721fc5dfa06f93.jpg"
                 alt="Couple kissing">
             <h2 class="text-xl font-bold mt-4 col-black text-gray-950">Over 2 million have found love</h2>
             <p class="text-gray-700">... could you be next?</p>
@@ -163,7 +163,9 @@
     <div class="Compatibility">
         <h1>Compatibility Counts</h1>
         <div class="Compatibility2">
-            <section><img src="https://www.eharmony.com/wplp/wp-content/uploads/sites/5/2023/11/MatchingWheel-Partner.svg" alt=""></section>
+            <section><img
+                    src="https://www.eharmony.com/wplp/wp-content/uploads/sites/5/2023/11/MatchingWheel-Partner.svg"
+                    alt=""></section>
             <section id="paragraph">
                 <p>What happens when you apply scientific research to dating behavior? A whole lotta love! But this
                     isn’t destiny, it’s deliberate. That’s why every 14 minutes, someone finds love on eharmony.</p>
@@ -174,23 +176,64 @@
 
 
 
-     <!------Quality Singles, Just Like You--------->
-     <div class="c-Compatibility">
+    <!------Quality Singles, Just Like You--------->
+    <div class="c-Compatibility">
         <h1>Quality Singles, Just Like You</h1>
-        <div class="c-Compatibility2">
-            <section id="c-paragraph" class="paragraph">
+        <div style="margin-bottom: 30px;" class="c-Compatibility2">
+            <section style="margin-left: 20px;" id="c-paragraph" class="paragraph">
                 <p>What happens when you apply scientific research to dating behavior? A whole lotta love! But this
-                    isn’t destiny, it’s deliberate. That’s why every 14 minutes, someone finds love on eharmony.</p>
-                    <button>Join Now</button>
-                </section>
-                <section id="c-image"><img src="https://www.eharmony.com/wplp/wp-content/uploads/sites/5/2023/11/compatibillity-score.png" alt=""></section>
+                    isn’t destiny, it’s deliberate. That’s why every 14 minutes, someone finds love on eharmony. this
+                    page has made by PSS techno services noida Sector 63</p>
+                <button>Join Now</button>
+            </section>
+            <section id="c-image"><img
+                    src="https://www.eharmony.com/wplp/wp-content/uploads/sites/5/2023/11/compatibillity-score.png"
+                    alt=""></section>
         </div>
     </div>
 
 
 
     <!---................................We’re Here For You---->
+    <div class="three">
+        <h1>We’re Here For You</h1>
+        <p>Signing up for eharmony is the first step in finding your next great relationship. From profile tips to
+            sharing your success story, we are here to support you in your journey for love.</p>
+        <p>WE’RE AVAILABLE 24/7, 365 DAYS A YEAR</p>
+        <button>Contact US</button>
+    </div>
 
+
+
+
+    <!---...............................The Real Deal---->
+    <div class="four">
+        <h1>The Real Deal</h1>
+        <div class="four1">
+            <div class="img">
+                <img src="../images/pexels-pixabay-247908.jpg" alt="Left Image" class="left-image">
+                <div class="right-images">
+                    <img src="../images/pexels-josh-willink-11499-58572.jpg" alt="Right Image 1">
+                    <img src="../images/pexels-vjapratama-935789.jpg" alt="Right Image 2">
+                </div>
+            </div>
+            <section style="text-align: justify;" class="four2">
+                <p>
+                    Over the course of our 20+ years in the relationship business, millions of couples have found lasting
+                    love. Give us a try when you’re ready for something real.
+            </p>
+            <button>Jion Now</button>
+        </section>
+        </div>
+    </div>
+    </div>
+    
+    <!---...............................The Real Deal---->
+
+
+    
+
+    
     <!-- Footer -->
     <?php
     include("footer.php");

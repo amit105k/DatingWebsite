@@ -1,8 +1,44 @@
 .footer {
-    text-align: center;
+    background: #2d7a4d;
+    color: white;
     padding: 20px;
-    background-color: #1c1c1e;
-    position: relative;
-    bottom: 0;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
+.footer-links {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.column a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.social-icons,
+.mobile-icons,
+.copyright {
+    text-align: center;
+}
+
+.social-icons i {
+    font-size: 23px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.icon {
+    margin: 0 5px;
+}
