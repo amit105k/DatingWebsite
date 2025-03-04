@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
 
     $stmt = $conn->prepare("INSERT INTO customer_reg (Customer_Name, Gender,Age, email, mobile, Password, Address) VALUES (?, ?, ?, ?, ?, ?,?)");
-    $stmt->bind_param("ssssss", $customerName, $gender, $Age, $email, $mobile, $password, $address);
+    $stmt->bind_param("sssssss", $customerName, $gender, $Age, $email, $mobile, $password, $address);
 
 
     if ($stmt->execute()) {

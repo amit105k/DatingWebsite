@@ -1,43 +1,48 @@
 <?php
-
+include("db.php");
 session_start();
 if (!isset($_SESSION['user'])) {
     echo "<script>Swal.fire('Not Logged In', 'Please login to continue!', 'warning');</script>";
 }
+$loggedInUser = ($_SESSION['user']);
 $data = ($_SESSION['user']);
 
-include("db.php");
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 $query = "SELECT * FROM customer_reg WHERE email=?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("s", $data['email']);
 $stmt->execute();
-$result = $stmt->get_result();
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $amit = $row;
-    }
+$resultt = $stmt->get_result();
+$amit = $resultt->fetch_assoc();
+
+
+function getRandomProfile($gender, $conn)
+{
+    $oppositeGender = ($gender === 'Male') ? 'Female' : 'Male';
+    $query = "SELECT * FROM customer_reg WHERE Gender = ? ORDER BY RAND() LIMIT 1";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $oppositeGender);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_assoc();
 }
+
+$oppositeProfile = getRandomProfile($amit['Gender'], $conn);
 
 
 
 
 //----------------------------------------
 
-$sql = "SELECT * FROM movie_details ORDER BY RAND() LIMIT 1";
-$result = $conn->query($sql);
-
-$movie = null;
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $mov = $row;
-    }
+function getRandomMovie($conn) {
+    $result = $conn->query("SELECT * FROM movie_details ORDER BY RAND() LIMIT 1");
+    return $result->fetch_assoc();
 }
 
-$conn->close();
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['getRandomMovie'])) {
+    $movie = getRandomMovie($conn);
+} else {
+    $movie = getRandomMovie($conn);
+}
 ?>
 
 
@@ -115,6 +120,33 @@ $conn->close();
             cursor: pointer;
         }
     </style>
+
+    <style>
+        .center-section {
+            text-align: center;
+
+        }
+
+        img {
+            width: 200px;
+            height: 200px;
+            margin-top: 20px;
+        }
+
+        #confirm_book {
+            background-color: red;
+            padding: 10px;
+            margin-top: 30px;
+            align-items: center;
+        }
+        button[type='submit']{
+            padding: 10px;
+            cursor: pointer;
+        }
+        #movie_details{
+            width: 80%;
+        }
+    </style>
 </head>
 
 <body>
@@ -130,46 +162,67 @@ $conn->close();
             <span class="close" onclick="closeModal()">&times;</span>
             <div class="container">
                 <div class="left-section">
-                    <!-- <img src="user-placeholder.jpg" alt="User" style="height: 200px; width: 100px;"> -->
                     <img src="<?php echo htmlspecialchars($amit['image']); ?>" id="profileImage" alt="Profile Image"
                         style="height: 200px; width: 200px;">
-                    <p>Name: <?php echo $amit['Customer_Name'] ?></p>
+                    <p>Name: <?php echo htmlspecialchars($amit['Customer_Name']); ?></p>
                     <p>Age: <?php echo $amit['Age'] ?? '-'; ?></p>
                     <p>Gender: <?php echo $amit['Gender'] ?? '-'; ?></p>
-
+                    <p>Address: <?php echo $amit['Address'] ?? '-'; ?></p>
                 </div>
+                <!-------------------------------------------------->
                 <div class="center-section">
-                <h1>Random Movie</h1>
-                <button onclick="getRandomMovie()">Get Random Movie</button>
-                    <div id="movie-info" style="margin-top: 20px;">
-                        <h2 id="movie-name"></h2>
-                        <img id="movie-image" src="" alt="Movie Image" style="width: 300px; height: 400px;">
+                    <div id="movie-info">
+                        <?php if ($movie): ?>
+                            <img id="movie-image" src="<?php echo htmlspecialchars($movie['m_image']); ?>"
+                                alt="Movie Image">
+                            <h2 id="movie-name"><?php echo htmlspecialchars($movie['Name']); ?></h2>
+                            <h4>Description</h4>
+                            <p id="movie_details"><?php echo htmlspecialchars($movie['movie_details']); ?></p>
+                        <?php elseif (isset($error)): ?>
+                            <p style="color: red;"><?php echo $error; ?></p>
+                        <?php endif; ?>
+                        <form method="post">
+                            <button type="submit" name="getRandomMovie">Get Random Movie</button>
+                        </form>
                     </div>
+                    <button id="confirm_book"> Confirm Booking</button>
 
-
-
-                    <!-- <img src="<?php echo htmlspecialchars($mov['m_image']); ?>" id="profileImage" alt="Profile Image" style="height: 200px; width: 200px;">
-                <img id="movie-image" src="<?php echo htmlspecialchars($mov['m_image']); ?>" alt="Movie Image" style="width: 200px; height: 200px;">
-                <h2 id="movie-name"></h2>
-
-                <p>Movie name: <?php echo $mov['Name'] ?? '-'; ?></p>
-                    <button onclick="selectRandomMovie()">Random Movie</button> 
-                    <button onclick="getRandomMovie()">Get Random Movie</button> -->
-
-                    <button onclick="showTrendingMovies()">Trending Movies</button>
-                    <p id="movieName">Selected Movie: -</p>
                 </div>
+
+
+                <!------------------------------------------------------------------->
                 <div class="right-section">
-                    <img src="<?php echo htmlspecialchars($amit['image']); ?>" id="profileImage" alt="Profile Image"
-                        style="height: 200px; width: 200px;">
-                    <p>Name: <?php echo $amit['Customer_Name'] ?></p>
-                    <p>Age: <?php echo $amit['Age'] ?? '-'; ?></p>
-                    <p>Gender: <?php echo $amit['Gender'] ?? '-'; ?></p>
+                    <?php if ($oppositeProfile): ?>
+                    <img src="<?php echo htmlspecialchars($oppositeProfile['image']); ?>" id="profileImage"
+                        alt="Profile Image" style="height: 200px; width: 200px;">
+                    <p>Name:
+                        <?php echo htmlspecialchars($oppositeProfile['Customer_Name']); ?>
+                    </p>
+                    <p>Age:
+                        <?php echo $oppositeProfile['Age'] ?? '-'; ?>
+                    </p>
+                    <p>Gender:
+                        <?php echo $oppositeProfile['Gender'] ?? '-'; ?>
+                    </p>
+                    <p>Address: <?php echo $amit['Address'] ?? '-'; ?></p>
+
+                    <form method="post">
+                        <button type="submit" name="showAnother">Another</button>
+                    </form>
+                    <?php else: ?>
+                    <p>No profiles found.</p>
+                    <?php endif; ?>
                 </div>
+                <!---------------------------------->
             </div>
         </div>
     </div>
+    <?php
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['showAnother'])) {
+        $oppositeProfile = getRandomProfile($amit['Gender'], $conn);
+    }
 
+    ?>
     <script>
         function openModal() {
             document.getElementById('modal').style.display = 'block';
@@ -177,26 +230,8 @@ $conn->close();
         function closeModal() {
             document.getElementById('modal').style.display = 'none';
         }
-        function selectRandomMovie() {
-            const movies = ['Inception', 'The Matrix', 'Interstellar', 'Fight Club', 'The Dark Knight'];
-            const randomMovie = movies[Math.floor(Math.random() * movies.length)];
-            document.getElementById('movieName').innerText = 'Selected Movie: ' + randomMovie;
-        }
-        function showTrendingMovies() {
-            alert('Trending Movies: Dune, Oppenheimer, Barbie, Spider-Man: No Way Home');
-        }
     </script>
-    <script>
-        function getRandomMovie() {
-            fetch('random_movie.php')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('movie-name').textContent = data.movie_name;
-                    document.getElementById('movie-image').src = data.movie_image;
-                })
-                .catch(err => console.error('Error fetching movie:', err));
-        }
-    </script>
+
 </body>
 
 </html>

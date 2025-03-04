@@ -4,28 +4,54 @@ $response = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $movie_name = htmlspecialchars($_POST['movie_name']);
-    $image_name = $_FILES['image']['name'];
-    $image_tmp_name = $_FILES['image']['tmp_name'];
-    $image_folder = 'logo/' . uniqid() . '_' . basename($image_name);
+    $movie_desc = htmlspecialchars($_POST['movie_desc']);
+    $stmt = null; 
 
-    if (move_uploaded_file($image_tmp_name, $image_folder)) {
-        $stmt = $conn->prepare("INSERT INTO movie_details (Name, m_image) VALUES (?, ?)");
+  
+    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+        $image_name = $_FILES['image']['name'];
+        $image_tmp_name = $_FILES['image']['tmp_name'];
+        $image_folder = 'logo/' . uniqid() . '_' . basename($image_name);
 
-        $stmt->bind_param("ss", $movie_name, $image_folder);
-
-        if ($stmt->execute()) {
-            $response = "success";
-        } else {
-            $response = "error";
+        if (move_uploaded_file($image_tmp_name, $image_folder)) {
+        
+            $stmt = $conn->prepare("INSERT INTO movie_details (Name, m_image,movie_details) VALUES (?, ?,?)");
+            $stmt->bind_param("sss", $movie_name, $image_folder,$movie_desc);
         }
-        $stmt->close();
+    }
+   
+    elseif (isset($_POST['image']) && filter_var($_POST['image'], FILTER_VALIDATE_URL)) {
+        $image_url = $_POST['image'];
+        
+   
+        $stmt = $conn->prepare("INSERT INTO movie_details (Name, m_image,movie_details) VALUES (?, ?,?)");
+        $stmt->bind_param("sss", $movie_name, $image_url,$movie_desc);
     } else {
-        $response = "error";
+      
+        $response = "Please upload a file or provide a valid image URL.";
+    }
+
+
+    if ($stmt !== null && $stmt->execute()) {
+        $response = "success";
+    } else {
+      
+        if ($stmt === null) {
+            $response = "error: no valid image or URL provided.";
+        } else {
+            $response = "error: query execution failed.";
+        }
+    }
+
+    
+    if ($stmt !== null) {
+        $stmt->close();
     }
 
     $conn->close();
 }
 ?>
+
 
 
 
@@ -47,47 +73,63 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <!-- <nav>
-        <h4 id="thenoida">The Noida Clubs</h4>
-        <a href="index.php">Home</a>
-        <a href="about.php">About</a>
-        <a href="service.php">Services</a>
-        <a href="#clubs">Clubs</a>
-        <a href="#clubs">Gallery</a> 
-        <a href="contact.php">Contact Us</a>
-         <a href="../Html/buyticket.php">Buy Tickets</a><img src="../image/new.gif" alt=""> 
-        <a href="status.php" id="status">Booking Status</a>
-        <a href="VenderProfile.php"><i class="fa-solid fa-left-long"></i> Back To Profile</a>
+<div class="profile">
+    <div class="details">
+        <h2>Movie details are entered</h2>
+        <form action="" method="post" enctype="multipart/form-data">
+            <label for="movie_name">Enter Movie Name</label>
+            <input type="text" name="movie_name" id="movie_name" required>
 
-        ..................drop down is here
-
-
-    </nav> -->
-
-
-
-    <!-- ...this is profile details..-->
-
-
-
-    <!-- <h2 id="h2">Vender Profile</h2> -->
-    <div class="profile">
-
-        <div class="details">
-            <h2>Movie details are entered</h2>
-            <form action="" method="post" enctype="multipart/form-data">
-                <label for="movie_name">Enter Movie Name</label>
-                <input type="text" name="movie_name" id="movie_name">
-                <label for="image">Upload Thumbnail</label>
-                <!-- Changed name attribute to 'image' -->
-                <input type="file" name="image" id="image">
-                <button type="submit">Submit</button>
-            </form>
-
-        </div>
-
-
+            <label for="image">Upload Thumbnail (Choose one)</label>
+            <input type="file" name="image" id="image" onchange="toggleInputs()">
+            <br><br>
+            <label for="image_url">Enter Image URL</label>
+            <input type="url" name="image" id="image_url" onchange="toggleInputs()">
+            <br><br>
+            <label for="movie_name">Enter Movie Name</label>
+            <input type="text" name="movie_desc" id="movie_name" required>
+            <button type="submit">Submit</button>
+        </form>
     </div>
+</div>
+
+<script>
+    function toggleInputs() {
+        var fileInput = document.getElementById('image');
+        var urlInput = document.getElementById('image_url');
+        if (fileInput.value) {
+            urlInput.disabled = true;
+        } else if (urlInput.value) {
+            fileInput.disabled = true;
+        } else {
+            urlInput.disabled = false;
+            fileInput.disabled = false;
+        }
+    }
+    window.onload = function() {
+        toggleInputs();
+    };
+</script>
+
+
+<script>
+    function toggleInputs() {
+        var fileInput = document.getElementById('image');
+        var urlInput = document.getElementById('image_url');
+        if (fileInput.value) {
+            urlInput.disabled = true;
+        } else if (urlInput.value) {
+            fileInput.disabled = true;
+        } else {
+            urlInput.disabled = false;
+            fileInput.disabled = false;
+        }
+    }
+
+    window.onload = function() {
+        toggleInputs();
+    };
+</script>
 
 
     <!---,.............footer is eher-->
@@ -107,7 +149,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     .details {
         width: 80%;
-        /* margin: 20px auto; */
         padding: 20px;
         background-color: #f4f4f4;
         border-radius: 10px;
