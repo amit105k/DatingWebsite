@@ -6,7 +6,7 @@ if (!isset($_SESSION['user'])) {
     echo "<script>Swal.fire('Not Logged In', 'Please login to continue!', 'warning');</script>";
     exit();
 }
-
+$isSessionActive = isset($_SESSION['user']);
 $loggedInUser = $_SESSION['user'];
 $email = $loggedInUser['email'];
 
@@ -105,20 +105,71 @@ $oppositeProfile = getRandomProfile($amit['Gender'], $conn);
 </head>
 <body>
 
-<!-- Hero Section -->
 <section class="hero">
     <h1>Find Your Movie Match 🎞️</h1>
     <p>Discover people who love the same movies as you!</p>
     <button class="btn" onclick="openModal()">Get Started</button>
 </section>
 
-<!-- Modal -->
-<div id="modal" class="modal">
+<h3>kjhh</h3>
+
+<?php if ($isSessionActive): ?>
+    <!-- Modal Code (will be displayed if session is active) -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="container">
+                <div class="left-section">
+                    <img src="<?php echo htmlspecialchars($amit['image']); ?>" alt="Profile Image" style="height: 200px; width: 200px;">
+                    <p>Name: <?php echo htmlspecialchars($amit['Customer_Name']); ?></p>
+                    <p>Age: <?php echo $amit['Age'] ?? '-'; ?></p>
+                    <p>Gender: <?php echo $amit['Gender'] ?? '-'; ?></p>
+                    <p>Address: <?php echo $amit['Address'] ?? '-'; ?></p>
+                </div>
+
+                <div class="center-section">
+                    <div id="movie-info">
+                        <img src="<?php echo htmlspecialchars($movie['m_image']); ?>" alt="Movie Image">
+                        <h2><?php echo htmlspecialchars($movie['Name']); ?></h2>
+                        <h4>Description</h4>
+                        <p><?php echo htmlspecialchars($movie['movie_details']); ?></p>
+                        <button onclick="fetchContent('getRandomMovie', document.querySelector('#movie-info'), updateMovie)">
+                            Get Random Movie
+                        </button>
+                        <button id="confirm_book">Confirm Booking</button>
+                    </div>
+                </div>
+
+                <div class="right-section">
+                    <?php if ($oppositeProfile): ?>
+                        <img src="<?php echo htmlspecialchars($oppositeProfile['image']); ?>" alt="Profile Image" style="height: 200px; width: 200px;">
+                        <p>Name: <?php echo htmlspecialchars($oppositeProfile['Customer_Name']); ?></p>
+                        <p>Age: <?php echo $oppositeProfile['Age'] ?? '-'; ?></p>
+                        <p>Gender: <?php echo $oppositeProfile['Gender'] ?? '-'; ?></p>
+                        <p>Address: <?php echo $oppositeProfile['Address'] ?? '-'; ?></p>
+                        <button onclick="fetchContent('getAnotherProfile', document.querySelector('.right-section'), updateProfile)">
+                            Another
+                        </button>
+                    <?php else: ?>
+                        <p>No profiles found.</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php else: ?>
+    <!-- Alternative Content (when session is not active) -->
+    <h2>ii iam amit</h2>
+    <h3>amit</h3><br>
+    <h4>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</h4>
+<?php endif; ?>
+
+
+
+<!-- <div id="modal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
         <div class="container">
-
-            <!-- Left Section - Logged-in User -->
             <div class="left-section">
                 <img src="<?php echo htmlspecialchars($amit['image']); ?>" alt="Profile Image" style="height: 200px; width: 200px;">
                 <p>Name: <?php echo htmlspecialchars($amit['Customer_Name']); ?></p>
@@ -127,7 +178,6 @@ $oppositeProfile = getRandomProfile($amit['Gender'], $conn);
                 <p>Address: <?php echo $amit['Address'] ?? '-'; ?></p>
             </div>
 
-            <!-- Center Section - Movie Info -->
             <div class="center-section">
                 <div id="movie-info">
                     <img src="<?php echo htmlspecialchars($movie['m_image']); ?>" alt="Movie Image">
@@ -141,7 +191,6 @@ $oppositeProfile = getRandomProfile($amit['Gender'], $conn);
                 </div>
             </div>
 
-            <!-- Right Section - Opposite Profile -->
             <div class="right-section">
                 <?php if ($oppositeProfile): ?>
                     <img src="<?php echo htmlspecialchars($oppositeProfile['image']); ?>" alt="Profile Image" style="height: 200px; width: 200px;">
@@ -156,10 +205,9 @@ $oppositeProfile = getRandomProfile($amit['Gender'], $conn);
                     <p>No profiles found.</p>
                 <?php endif; ?>
             </div>
-
         </div>
     </div>
-</div>
+</div> -->
 
 </body>
 </html>
