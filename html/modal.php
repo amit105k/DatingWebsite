@@ -119,9 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['getRandomMovie'])) {
             font-size: 28px;
             cursor: pointer;
         }
-    </style>
-
-    <style>
+        /*********************** */
         .center-section {
             text-align: center;
 
