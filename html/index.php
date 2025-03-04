@@ -55,7 +55,7 @@
 
     <!--dating ----->
     <div class="flex justify-center items-center">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-0 w-full max-w-7xl">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-0 w-full max-w-7xll">
             <!-- Card 1 -->
             <div class="bg-green-800 text-white p-6 text-center flex flex-col items-center ">
                 <div class="mb-4">

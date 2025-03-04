@@ -36,13 +36,13 @@ if ($isSessionActive) {
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $action = $_POST['action'] ?? '';
-        
+
         if ($action === 'getRandomMovie') {
             $movie = getRandomMovie($conn);
             echo json_encode($movie);
             exit();
         }
-        
+
         if ($action === 'getAnotherProfile') {
             $oppositeProfile = getRandomProfile($amit['Gender'], $conn);
             echo json_encode($oppositeProfile);
@@ -50,7 +50,6 @@ if ($isSessionActive) {
         }
     }
 
-    // Fetch the movie and profile if the page is accessed initially
     if (!$movie) {
         $movie = getRandomMovie($conn);
     }
@@ -59,6 +58,33 @@ if ($isSessionActive) {
         $oppositeProfile = getRandomProfile($amit['Gender'], $conn);
     }
 }
+
+
+// login are here 
+
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $userEmail = $_POST['user'];
+    $userPassword = $_POST['password'];
+
+    $queryy = "SELECT id, Customer_Name, Age, Gender, email, mobile, Password, Address FROM customer_reg WHERE email = ? AND Password = ?";
+    $stmt = $conn->prepare($queryy);
+    $stmt->bind_param("ss", $userEmail, $userPassword);  
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $_SESSION['user'] = $row;
+        $response = "success";
+
+    } else {
+        
+        $response = "error";
+    }
+}
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -70,6 +96,102 @@ if ($isSessionActive) {
     <title>Movie & Profile Matching</title>
     <link rel="stylesheet" href="../css/newModal.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .sessionNotPresent {
+            /* background-color: red; */
+            background: url("https://i.etsystatic.com/48793331/r/il/3bc4e0/5842264399/il_fullxfull.5842264399_g41r.jpg");
+            background-size:cover;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        input[type='password'] {
+            margin-bottom: 0;
+        }
+
+        #forget a {
+            color: orange !important;
+            cursor: pointer;
+            text-align: right;
+            display: inline-block;
+            width: 95%;
+            padding: 10px;
+            text-decoration: none;
+
+        }
+
+        form {
+            max-width: 400px;
+            /* margin: 8% auto; */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            text-align: center;
+            margin-left: 27%;
+            margin-bottom: 20px;
+        }
+
+        form h2 {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .ftext {
+            text-align: center;
+            background-color: black;
+            color: white;
+            padding: 10px;
+            box-shadow: 0 0 0px 0px rgba(208, 141, 58, 0.57);
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #45a049;
+            font-size: 16px;
+
+        }
+
+        #venderreg {
+            width: 95%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 16px;
+            text-align: center;
+            /* margin-top: 10px; */
+            text-decoration: none;
+        }
+
+        #venderreg:hover {
+            background-color: #45a049;
+        }
+    </style>
     <script>
         function openModal() {
             document.getElementById('modal').style.display = 'block';
@@ -132,59 +254,86 @@ if ($isSessionActive) {
             <span class="close" onclick="closeModal()">&times;</span>
 
             <div class="container">
-                <div class="left-section">
-                    <?php if ($isSessionActive): ?>
+                <?php if ($isSessionActive): ?>
+                    <div class="left-section">
                         <img src="<?php echo htmlspecialchars($amit['image']); ?>" alt="Profile Image"
                             style="height: 200px; width: 200px;">
                         <p>Name: <?php echo htmlspecialchars($amit['Customer_Name']); ?></p>
                         <p>Age: <?php echo $amit['Age'] ?? '-'; ?></p>
                         <p>Gender: <?php echo $amit['Gender'] ?? '-'; ?></p>
                         <p>Address: <?php echo $amit['Address'] ?? '-'; ?></p>
-                    <?php else: ?>
-                        <div class="sessionNotPresent">
-                            <h2>You are not logged in!</h2>
-                            <h3>Please log in to continue.</h3><br>
-                            <h4>If you don't have an account, register first.</h4>
-                        </div>
-                    <?php endif; ?>
-                </div>
+                    </div>
 
-                <div class="center-section">
-                    <?php if ($isSessionActive && $movie): ?>
+                    <div class="center-section">
                         <div id="movie-info">
                             <img src="<?php echo htmlspecialchars($movie['m_image']); ?>" alt="Movie Image">
                             <h2><?php echo htmlspecialchars($movie['Name']); ?></h2>
                             <h4>Description</h4>
                             <p><?php echo htmlspecialchars($movie['movie_details']); ?></p>
-                            <button onclick="fetchContent('getRandomMovie', document.querySelector('#movie-info'), updateMovie)">
+                            <button
+                                onclick="fetchContent('getRandomMovie', document.querySelector('#movie-info'), updateMovie)">
                                 Get Random Movie
                             </button>
                             <button id="confirm_book">Confirm Booking</button>
                         </div>
-                    <?php endif; ?>
-                </div>
+                    </div>
 
-                <div class="right-section">
-                    <?php if ($isSessionActive && $oppositeProfile): ?>
+                    <div class="right-section">
                         <img src="<?php echo htmlspecialchars($oppositeProfile['image']); ?>" alt="Profile Image"
                             style="height: 200px; width: 200px;">
                         <p>Name: <?php echo htmlspecialchars($oppositeProfile['Customer_Name']); ?></p>
                         <p>Age: <?php echo $oppositeProfile['Age'] ?? '-'; ?></p>
                         <p>Gender: <?php echo $oppositeProfile['Gender'] ?? '-'; ?></p>
                         <p>Address: <?php echo $oppositeProfile['Address'] ?? '-'; ?></p>
-                        <button onclick="fetchContent('getAnotherProfile', document.querySelector('.right-section'), updateProfile)">
+                        <button
+                            onclick="fetchContent('getAnotherProfile', document.querySelector('.right-section'), updateProfile)">
                             Another
                         </button>
-                    <?php elseif (!$isSessionActive): ?>
-                        <!-- No profile content if not logged in -->
                     <?php else: ?>
-                        <p>No profiles found.</p>
-                    <?php endif; ?>
-                </div>
+                    </div>
+                    <div class="sessionNotPresent">
+                        <h2>You are not logged in!</h2>
+                        <h3>Please log in to continue.</h3><br>
+                        <form id="venderLogin" method="POST" action="" onsubmit="return loginUser(event)">
+                            <label for="user">Enter Your Email</label>
+                            <input type="text" name="user" id="user" required>
+
+                            <label for="password">Password</label>
+                            <input type="password" name="password" id="password" required>
+                            <span id="forget"><a href="CustomerPassForget.php">ForgetPassword</a></span>
+                            <input type="submit" value="Login">
+                            <a id="venderreg" href="CustReg.php">Register</a>
+                        </form>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 
+
+    <!-------------ajax for login------------------------->
+
+
+<script>    
+    document.addEventListener("DOMContentLoaded", function () {
+        let response = "<?php echo $response; ?>";
+
+        if (response === "success") {
+            Swal.fire({
+                title: 'Success!',
+                text: 'Login Success',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            })
+        } else if (response === "error") {
+            Swal.fire({
+                title: 'Error!',
+                text: 'User id and password are not match.',
+                icon: 'error'
+            });
+        }
+    });
+</script>
 </body>
 
 </html>
