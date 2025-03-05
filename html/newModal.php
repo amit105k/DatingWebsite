@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $queryy = "SELECT id, Customer_Name, Age, Gender, email, mobile, Password, Address FROM customer_reg WHERE email = ? AND Password = ?";
     $stmt = $conn->prepare($queryy);
-    $stmt->bind_param("ss", $userEmail, $userPassword);  
+    $stmt->bind_param("ss", $userEmail, $userPassword);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $response = "success";
 
     } else {
-        
+
         $response = "error";
     }
 }
@@ -96,102 +96,7 @@ $conn->close();
     <title>Movie & Profile Matching</title>
     <link rel="stylesheet" href="../css/newModal.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <style>
-        .sessionNotPresent {
-            /* background-color: red; */
-            background: url("https://i.etsystatic.com/48793331/r/il/3bc4e0/5842264399/il_fullxfull.5842264399_g41r.jpg");
-            background-size:cover;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        input[type='password'] {
-            margin-bottom: 0;
-        }
-
-        #forget a {
-            color: orange !important;
-            cursor: pointer;
-            text-align: right;
-            display: inline-block;
-            width: 95%;
-            padding: 10px;
-            text-decoration: none;
-
-        }
-
-        form {
-            max-width: 400px;
-            /* margin: 8% auto; */
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            text-align: center;
-            margin-left: 27%;
-            margin-bottom: 20px;
-        }
-
-        form h2 {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .ftext {
-            text-align: center;
-            background-color: black;
-            color: white;
-            padding: 10px;
-            box-shadow: 0 0 0px 0px rgba(208, 141, 58, 0.57);
-        }
-
-        input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            background-color: #45a049;
-            font-size: 16px;
-
-        }
-
-        #venderreg {
-            width: 95%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            display: inline-block;
-            font-size: 16px;
-            text-align: center;
-            /* margin-top: 10px; */
-            text-decoration: none;
-        }
-
-        #venderreg:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         function openModal() {
             document.getElementById('modal').style.display = 'block';
@@ -199,6 +104,7 @@ $conn->close();
 
         function closeModal() {
             document.getElementById('modal').style.display = 'none';
+            // window.location.href = 'index.php';
         }
 
         function fetchContent(action, container, callback) {
@@ -241,17 +147,55 @@ $conn->close();
 </head>
 
 <body>
+    <!--------------------------nav bar---------------------------->
 
+    <div class="navbar">
+        <a href="index.php">Home</a>
+        <a href="datingAdvance.php">Dating Advice</a>
+        <a href="SinglesNearMe.php">Singles Near Me</a>
+        <!-- <a href="CustLogin.php">Log in</a> -->
+        <div class="dropdown">
+            <?php if ($isSessionActive == true): ?>
+                <a href="logout.php">Logout</a>
+            <?php else: ?>
+                <a href="#">Register / Login</a>
+                <div class="dropdown-content">
+                    <div class="sub-dropdown">
+                        <a href="./CustReg.php">Register</a>
+                    </div>
+                    <div class="sub-dropdown">
+                        <a href="./CustLogin.php">Login</a>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <!------------------------------------------------------------------>
     <section class="hero">
         <h1>Find Your Movie Match 🎞️</h1>
         <p>Discover people who love the same movies as you!</p>
         <button class="btn" onclick="openModal()">Get Started</button>
     </section>
 
+
+
+
+    <!--------------------------next image is here------------------------------------>
+
+    <div class="n-second">
+        <img src="../images/newmodalimg2.jpg" alt="">
+    </div>
+
+
+
+
+
+
     <!-- Modal Code -->
     <div id="modal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close" onclick="closeModal()">X</span>
 
             <div class="container">
                 <?php if ($isSessionActive): ?>
@@ -311,29 +255,40 @@ $conn->close();
     </div>
 
 
-    <!-------------ajax for login------------------------->
 
 
-<script>    
-    document.addEventListener("DOMContentLoaded", function () {
-        let response = "<?php echo $response; ?>";
+    <script>
+        <!-------------ajax for login------------------------->
+        document.addEventListener("DOMContentLoaded", function () {
+            let response = "<?php echo $response; ?>";
 
-        if (response === "success") {
-            Swal.fire({
-                title: 'Success!',
-                text: 'Login Success',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            })
-        } else if (response === "error") {
-            Swal.fire({
-                title: 'Error!',
-                text: 'User id and password are not match.',
-                icon: 'error'
-            });
-        }
-    });
-</script>
+            if (!sessionStorage.getItem('reloaded') && response === "success") {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Login Success',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    sessionStorage.setItem('reloaded', 'true');
+                    location.reload();
+                });
+            } else if (response === "error") {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'User id and password are not match.',
+                    icon: 'error'
+                });
+            }
+
+            if (sessionStorage.getItem('reloaded') === 'true') {
+                openModal();
+                sessionStorage.removeItem('reloaded');
+            } else {
+                openModal();
+            }
+        });
+    </script>
+
 </body>
 
 </html>

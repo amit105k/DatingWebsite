@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         font-weight: bold;
     }
 
-    input {
+    input,select,option {
         width: 100%;
         padding: 8px;
         margin-bottom: 15px;

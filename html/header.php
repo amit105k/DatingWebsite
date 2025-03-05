@@ -1,4 +1,5 @@
-<?php
+<!--
+< ?php 
 include("db.php");
 
 if ($conn->connect_error) {
@@ -30,7 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
     exit;
 }
-?>
+    ?>
+-->
+
 
 
 
@@ -117,7 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>-->
 
-        <script>
+        <!-- <script>
             const modal = document.getElementById("signupModal");
             const btn = document.getElementById("startFreeBtn");
             const close = document.getElementById("closeModal");
@@ -129,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     modal.style.display = "none";
                 }
             }
-        </script>
+        </script> -->
 
 
 

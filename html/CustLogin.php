@@ -101,7 +101,7 @@ $conn->close();
 
 
         <input type="submit" value="Login">
-        <a id="venderreg" href="CustomerReg.php">Register</a>
+        <a id="venderreg" href="custReg.php">Register</a>
 
     </form>
 

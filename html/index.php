@@ -18,7 +18,13 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Arima:wght@100..700&family=Dancing+Script:wght@400..700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playwrite+HR+Lijeva:wght@100..400&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
+
+
+
+<!---------------------end of scrop----------------------------------------------------------->
 
 <body>
 
@@ -45,14 +51,12 @@
         </div>
     </div>
     <!-- Hero Section -->
+
     <section class="hero">
         <h1>Find Your Movie Match 🎞️</h1>
         <p>Discover people who love the same movies as you!</p>
-        <button class="btn">Get Started</button>
+        <button class="btn" ><a href="newModal.php">Get Started</a></button>
     </section>
-
-
-
     <!--dating ----->
     <div class="flex justify-center items-center">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-0 w-full max-w-7xll">
@@ -135,8 +139,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
         <!-- Card 1 -->
         <div class="image-card text-center">
-            <img src="https://i.pinimg.com/736x/d6/7c/cf/d67ccf534ca9d5b5ad721fc5dfa06f93.jpg"
-                alt="Couple kissing">
+            <img src="https://i.pinimg.com/736x/d6/7c/cf/d67ccf534ca9d5b5ad721fc5dfa06f93.jpg" alt="Couple kissing">
             <h2 class="text-xl font-bold mt-4 col-black text-gray-950">Over 2 million have found love</h2>
             <p class="text-gray-700">... could you be next?</p>
         </div>
@@ -219,21 +222,22 @@
             </div>
             <section style="text-align: justify;" class="four2">
                 <p>
-                    Over the course of our 20+ years in the relationship business, millions of couples have found lasting
+                    Over the course of our 20+ years in the relationship business, millions of couples have found
+                    lasting
                     love. Give us a try when you’re ready for something real.
-            </p>
-            <button>Jion Now</button>
-        </section>
+                </p>
+                <button>Jion Now</button>
+            </section>
         </div>
     </div>
     </div>
-    
+
     <!---...............................The Real Deal---->
 
 
-    
 
-    
+
+
     <!-- Footer -->
     <?php
     include("footer.php");

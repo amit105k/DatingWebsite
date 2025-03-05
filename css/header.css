@@ -92,16 +92,16 @@
 
 /*********************************************/
 
+/* form {
 
-form {
-    /* max-width: 400px; */
+    /* background: url("https://i.pinimg.com/736x/d6/7c/cf/d67ccf534ca9d5b5ad721fc5dfa06f93.jpg"); */
+    /* max-width: 400px; 
     margin: auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    /* background-color: #f4f3f3 !important; */
+    /* background-color: #f4f3f3 !important; 
     margin-bottom: 20px;
-    /* background: url("https://i.pinimg.com/736x/d6/7c/cf/d67ccf534ca9d5b5ad721fc5dfa06f93.jpg"); */
 
 }
 
@@ -202,4 +202,4 @@ input,select,option {
     
     color: black;
 }
-
+ */
