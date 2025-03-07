@@ -1,24 +1,4 @@
-/* body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background: #f0f0f0;
-} */
 
-/* .hero {
-    text-align: center;
-    padding: 20px;
-    background: #ff6b6b;
-    color: #fff;
-} */
-
-/* .btn {
-    padding: 10px 20px;
-    background: #fff;
-    color: #ff6b6b;
-    border: none;
-    cursor: pointer;
-} */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -26,14 +6,6 @@ body {
     background: #f0f0f0;
     color: white;
 }
-
-/* .hero {
-    text-align: center;
-    padding: 20px;
-    background: #ff6b6b;
-    color: #fff;
-} 
-*/
 .btn {
     padding: 10px 20px;
     background: #68750c;
@@ -122,11 +94,16 @@ body {
 }
 
 
-#confirm_book {
+#confirm_book{
     background-color: black;
     padding: 10px;
     margin-top: 30px;
     align-items: center;
+}
+#confirm_book a{
+    color: white;
+    text-decoration: none;
+
 }
 
 button[type='submit'] {

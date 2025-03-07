@@ -211,14 +211,14 @@ $conn->close();
                     <div class="center-section">
                         <div id="movie-info">
                             <img src="<?php echo htmlspecialchars($movie['m_image']); ?>" alt="Movie Image">
-                            <h2><?php echo htmlspecialchars($movie['Name']); ?></h2>
+                            <h3><?php echo htmlspecialchars($movie['Name']); ?></h3>
                             <h4>Description</h4>
                             <p><?php echo htmlspecialchars($movie['movie_details']); ?></p>
                             <button
                                 onclick="fetchContent('getRandomMovie', document.querySelector('#movie-info'), updateMovie)">
                                 Get Random Movie
                             </button>
-                            <button id="confirm_book">Confirm Booking</button>
+                            <button id="confirm_book"><a href="ReviewBooking.php">Confirm Booking</a></button>
                         </div>
                     </div>
 
