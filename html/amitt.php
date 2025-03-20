@@ -140,6 +140,7 @@ $conn->close();
         <p>Gender: ${profile.Gender ?? '-'}</p>
         <p>Address: ${profile.Address ?? '-'}</p>
         <p>Id: ${profile.id ?? '-'}</p>
+        <p>Email: ${profile.email ?? '-'}</p>
         <button onclick="fetchContent('getAnotherProfile', document.querySelector('.right-section'), updateProfile)">
             Another
         </button>
@@ -155,26 +156,26 @@ $conn->close();
     // // Create an object with the necessary data
     // const bookingDetails = {
     //     movie: {
-    //         name: "<?php echo htmlspecialchars($movie['Name']); ?>",
-    //         image: "<?php echo htmlspecialchars($movie['m_image']); ?>",
-    //         description: "<?php echo htmlspecialchars($movie['movie_details']); ?>",
-    //         id: "<?php echo $movie['id'] ?? '-'; ?>"
+    //         name: "?php echo htmlspecialchars($movie['Name']); ?>",
+    //         image: "?php echo htmlspecialchars($movie['m_image']); ?>",
+    //         description: "?php echo htmlspecialchars($movie['movie_details']); ?>",
+    //         id: "?php echo $movie['id'] ?? '-'; ?>"
     //     },
     //     userProfile: {
-    //         name: "<?php echo htmlspecialchars($amit['Customer_Name']); ?>",
-    //         age: "<?php echo $amit['Age'] ?? '-'; ?>",
-    //         gender: "<?php echo $amit['Gender'] ?? '-'; ?>",
-    //         address: "<?php echo $amit['Address'] ?? '-'; ?>",
-    //         uid: "<?php echo $amit['id'] ?? '-'; ?>",
-    //         image: "<?php echo htmlspecialchars($amit['image']); ?>"
+    //         name: "?php echo htmlspecialchars($amit['Customer_Name']); ?>",
+    //         age: "?php echo $amit['Age'] ?? '-'; ?>",
+    //         gender: "?php echo $amit['Gender'] ?? '-'; ?>",
+    //         address: "?php echo $amit['Address'] ?? '-'; ?>",
+    //         uid: "?php echo $amit['id'] ?? '-'; ?>",
+    //         image: "?php echo htmlspecialchars($amit['image']); ?>"
     //     },
     //     oppositeProfile: {
-    //         name: "<?php echo htmlspecialchars($oppositeProfile['Customer_Name']); ?>",
-    //         age: "<?php echo $oppositeProfile['Age'] ?? '-'; ?>",
-    //         gender: "<?php echo $oppositeProfile['Gender'] ?? '-'; ?>",
-    //         address: "<?php echo $oppositeProfile['Address'] ?? '-'; ?>",
-    //         oid: "<?php echo $oppositeProfile['id'] ?? '-'; ?>",
-    //         image: "<?php echo htmlspecialchars($oppositeProfile['image']); ?>"
+    //         name: "?php echo htmlspecialchars($oppositeProfile['Customer_Name']); ?>",
+    //         age: "?php echo $oppositeProfile['Age'] ?? '-'; ?>",
+    //         gender: "?php echo $oppositeProfile['Gender'] ?? '-'; ?>",
+    //         address: "?php echo $oppositeProfile['Address'] ?? '-'; ?>",
+    //         oid: "?php echo $oppositeProfile['id'] ?? '-'; ?>",
+    //         image: "?php echo htmlspecialchars($oppositeProfile['image']); ?>"
     //     }
     // };
 
@@ -236,13 +237,14 @@ $conn->close();
             <div class="container">
                 <?php if ($isSessionActive): ?>
                     <div class="left-section">
-                        <img src="<?php echo htmlspecialchars($amit['image']); ?>" alt="Profile Image"
-                            style="height: 200px; width: 200px;">
+                        <img src="<?php echo htmlspecialchars($amit['image']); ?>" alt="Profile Image" style="height: 200px; width: 200px;">
                         <p>Name: <?php echo htmlspecialchars($amit['Customer_Name']); ?></p>
                         <p>Age: <?php echo $amit['Age'] ?? '-'; ?></p>
                         <p>Gender: <?php echo $amit['Gender'] ?? '-'; ?></p>
                         <p>Address: <?php echo $amit['Address'] ?? '-'; ?></p>
                         <p>Uid: <?php echo $amit['id'] ?? '-'; ?></p>
+                        <p>Email: <?php echo $amit['email'] ?? '-'; ?></p>
+
                     </div>
 
                     <div class="center-section">
@@ -251,12 +253,9 @@ $conn->close();
                             <h3><?php echo htmlspecialchars($movie['Name']); ?></h3>
                             <h4>Description</h4>
                             <p><?php echo htmlspecialchars($movie['movie_details']); ?></p>
-                            <p>Mid: <?php echo $amit['id'] ?? '-'; ?></p>
+                            <p>Mid: <?php echo $movie['id'] ?? '-'; ?></p>
 
-                            <button
-                                onclick="fetchContent('getRandomMovie', document.querySelector('#movie-info'), updateMovie)">
-                                Get Random Movie
-                            </button>
+                            <button onclick="fetchContent('getRandomMovie', document.querySelector('#movie-info'), updateMovie)">Get Random Movies</button>
                             <button id="confirm_book" onclick="confirmBooking()">Confirm Booking</button>
                             <!-- <button id="confirm_book" onclick="storeBookingDetailsAndRedirect()">Confirm Booking</button> -->
 
@@ -270,7 +269,8 @@ $conn->close();
                         <p>Age: <?php echo $oppositeProfile['Age'] ?? '-'; ?></p>
                         <p>Gender: <?php echo $oppositeProfile['Gender'] ?? '-'; ?></p>
                         <p>Address: <?php echo $oppositeProfile['Address'] ?? '-'; ?></p>
-                        <p>oid: <?php echo $amit['id'] ?? '-'; ?></p>
+                        <p>oid: <?php echo $oppositeProfilet['id'] ?? '-'; ?></p>
+                        <p>oid: <?php echo $oppositeProfile['email'] ?? '-'; ?></p>
 
                         <button
                             onclick="fetchContent('getAnotherProfile', document.querySelector('.right-section'), updateProfile)">
@@ -339,11 +339,13 @@ $conn->close();
     const userId = <?php echo json_encode($amit['id'] ?? ''); ?>;
     const userEmail = <?php echo json_encode($amit['email'] ?? ''); ?>;
     const oppositeUserId = <?php echo json_encode($oppositeProfile['id'] ?? ''); ?>;
+    const oppositeEmail = <?php echo json_encode($oppositeProfile['email'] ?? ''); ?>;
     const movieId = <?php echo json_encode($movie['id'] ?? ''); ?>; 
     const data = {
         user_id: userId,
         user_email: userEmail,
         opposite_user_id: oppositeUserId,
+        opposite_email:oppositeEmail,
         movie_id: movieId
     };
 

@@ -367,32 +367,3 @@ if ($resultt->num_rows > 0) {
         display: none;
     }
 </style>
-
-<script>
-    function uploadImage() {
-        document.getElementById('uploadForm').submit();
-    }
-
-    <?php if (isset($_SESSION['success'])) { ?>
-        Swal.fire({
-            title: 'Profile Updated',
-            text: '<?php echo $_SESSION['success']; ?>',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        })
-        // .then(() => {
-        //     window.location.href = 'customerLogin.php';
-        // });
-        <?php unset($_SESSION['success']);
-    } ?>
-
-    <?php if (isset($_SESSION['error'])) { ?>
-        Swal.fire({
-            title: 'Error',
-            text: '<?php echo $_SESSION['error']; ?>',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
-        <?php unset($_SESSION['error']);
-    } ?>
-</script>
