@@ -1,193 +1,294 @@
 <?php
-session_start();
-$amit = isset($_SESSION['user']); 
-
-if (!$amit) {
-    header("Location: CustLogin.php"); 
-   echo"something went wrong please login again";
-    exit();
-}
-include("db.php");
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $userId = $_POST['user-id'];
-    // $userName = $_POST['user-name'];
-    // $userAge = $_POST['user-age'];
-    // $userGender = $_POST['user-gender'];
-    // $userAddress = $_POST['user-address'];
-
-    $movieId = $_POST['movie-id'];
-    // $movieName = $_POST['movie-name'];
-    // $movieImage = $_POST['movie-image'];
-    // $movieDescription = $_POST['movie-description'];
-
-    $daterId = $_POST['dater-id'];
-    // $daterName = $_POST['dater-name'];
-    // $daterAge = $_POST['dater-age'];
-    // $daterGender = $_POST['dater-gender'];
-    // $daterAddress = $_POST['dater-address'];
-
-    // $sql = "INSERT INTO bookings 
-    //         (user_id, user_name, user_age, user_gender, user_address,
-    //          movie_id, movie_name, movie_image, movie_description,
-    //          dater_id, dater_name, dater_age, dater_gender, dater_address) 
-    //         VALUES 
-    //         ('$userId', '$userName', '$userAge', '$userGender', '$userAddress', 
-    //          '$movieId', '$movieName', '$movieImage', '$movieDescription', 
-    //          '$daterId', '$daterName', '$daterAge', '$daterGender', '$daterAddress')";
-    $sql = "INSERT INTO bookings (user_id,movie_id,dater_id)VALUES('$userId','$movieId', '$daterId')";
-    if ($conn->query($sql) === TRUE) {
-        $message = "Data has been inserted into the database.";
-    } else {
-        $message = "Error: " . $sql . "<br>" . $conn->error;
-    }
-    $conn->close();
-}
+$bookingDetails = isset($_SESSION['bookingDetails']) ? json_decode($_SESSION['bookingDetails'], true) : null;
 ?>
+
+<?php 
+// include("db.php");
+
+// $id=$bookingDetails['movie']['id'];
+// $stmt = $conn->prepare("SELECT * FROM movie_details WHERE id = ?");
+// $stmt->bind_param("i", $id); 
+// $stmt->execute();
+// $result = $stmt->get_result();
+// if($result->num_rows){
+//     while($row=$result->fetch_assoc()){
+//         $movie_id=$row['id'];
+//     }
+// }
+
+include("db.php");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $movieName = $_POST['movieName'];
+    $movieDescription = $_POST['movieDescription'];
+    $movieImage = $_POST['movieImage'];
+    $movieId = $_POST['movieId'];
+
+    $userProfileName = $_POST['userProfileName'];
+    $userProfileAge = $_POST['userProfileAge'];
+    $userProfileGender = $_POST['userProfileGender'];
+    $userProfileAddress = $_POST['userProfileAddress'];
+    $userProfileImage = $_POST['userProfileImage'];
+
+    $oppositeProfileName = $_POST['oppositeProfileName'];
+    $oppositeProfileAge = $_POST['oppositeProfileAge'];
+    $oppositeProfileGender = $_POST['oppositeProfileGender'];
+    $oppositeProfileAddress = $_POST['oppositeProfileAddress'];
+    $oppositeProfileImage = $_POST['oppositeProfileImage'];
+
+    $sql = "INSERT INTO bookings (movie, mname, mdesc, rsr, rname, rage, rgender, raddress, profile_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("ssssssssssssss", $movieName, $movieDescription, $movieImage, $movieId,
+                                             $userProfileName, $userProfileAge, $userProfileGender, $userProfileAddress, $userProfileImage,
+                                             $oppositeProfileName, $oppositeProfileAge, $oppositeProfileGender, $oppositeProfileAddress, $oppositeProfileImage);
+
+        if ($stmt->execute()) {
+            echo "Booking confirmed successfully!";
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+
+        $stmt->close();
+    } else {
+        echo "Error: " . $conn->error;
+    }
+}
+
+$conn->close();
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Submission</title>
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.20/dist/sweetalert2.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            width: 400px;
-            display: flex;
-            flex-direction: column;
-        }
-        h3 {
-            color: #333;
-        }
-        label {
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            font-size: 14px;
-        }
-        textarea {
-            height: 80px;
-        }
-        .btn-submit {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-size: 16px;
-        }
-        .btn-submit:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <title>Review Booking</title>
 </head>
 <body>
-    <div class="container">
-        <h3>Your Details</h3>
-        <form method="POST" action="">
-            <!-- Populate user details from session -->
-            <label for="user-id">Your ID</label>
-            <input type="text" id="user-id" name="user-id" value="<?php echo $_SESSION['user']['id']; ?>" readonly>
 
-            <label for="user-name">Your Name</label>
-            <input type="text" id="user-name" name="user-name" value="<?php echo $_SESSION['user']['name']; ?>" readonly>
+    
+    <form id="reviewForm">
+            <!-- <h1>Review Your Booking</h1> -->
+            <!-- Movie Details -->
 
-            <label for="user-age">Your Age</label>
-            <input type="text" id="user-age" name="user-age" value="<?php echo $_SESSION['user']['age']; ?>" readonly>
+            <!-- <p>Movie ID: <?php echo htmlspecialchars($movie_id); ?></p> -->
+            <h2>Movie Details</h2>
+            <label for="movieName">Movie Name</label>
+            <input type="text" id="movieName" name="movieName" value="<?php echo $bookingDetails['movie']['name']; ?>" readonly><br>
 
-            <label for="user-gender">Your Gender</label>
-            <input type="text" id="user-gender" name="user-gender" value="<?php echo $_SESSION['user']['gender']; ?>" readonly>
+            <label for="movieDescription">Movie Description</label>
+            <textarea id="movieDescription" name="movieDescription" readonly><?php echo $bookingDetails['movie']['description']; ?></textarea><br>
 
-            <label for="user-address">Your Address</label>
-            <input type="text" id="user-address" name="user-address" value="<?php echo $_SESSION['user']['address']; ?>" readonly>
+            <label for="movieImage">Movie Image URL</label>
+            <input type="text" id="movieImage" name="movieImage" value="<?php echo $bookingDetails['movie']['image']; ?>" readonly><br>
 
-            <h3>Movie Details</h3>
-            <label for="movie-id">Movie ID</label>
-            <input type="text" id="movie-id" name="movie-id" value="" readonly>
+            <label for="movieId">Movie ID</label>
+            <input type="text" id="movieId" name="movieId" value="<?php echo $bookingDetails['movie']['id']; ?>" readonly><br>
 
-            <label for="movie-name">Movie Name</label>
-            <input type="text" id="movie-name" name="movie-name" value="" readonly>
+            <!-- User Profile -->
+            <h2>Your Profile</h2>
+            <label for="userProfileName">Your Name</label>
+            <input type="text" id="userProfileName" name="userProfileName" value="<?php echo $bookingDetails['userProfile']['name']; ?>" readonly><br>
 
-            <label for="movie-image">Movie Image</label>
-            <input type="text" id="movie-image" name="movie-image" value="" readonly>
+            <label for="userProfileAge">Your Age</label>
+            <input type="text" id="userProfileAge" name="userProfileAge" value="<?php echo $bookingDetails['userProfile']['age']; ?>" readonly><br>
 
-            <label for="movie-description">Movie Description</label>
-            <textarea id="movie-description" name="movie-description" readonly></textarea>
+            <label for="userProfileGender">Your Gender</label>
+            <input type="text" id="userProfileGender" name="userProfileGender" value="<?php echo $bookingDetails['userProfile']['gender']; ?>" readonly><br>
 
-            <h3>Date With</h3>
-            <label for="dater-id">Dater ID</label>
-            <input type="text" id="dater-id" name="dater-id" value="" readonly>
+            <label for="userProfileAddress">Your Address</label>
+            <input type="text" id="userProfileAddress" name="userProfileAddress" value="<?php echo $bookingDetails['userProfile']['address']; ?>" readonly><br>
 
-            <label for="dater-name">Dater Name</label>
-            <input type="text" id="dater-name" name="dater-name" value="" readonly>
+            <label for="userProfileImage">Your Profile Image URL</label>
+            <input type="text" id="userProfileImage" name="userProfileImage" value="<?php echo $bookingDetails['userProfile']['image']; ?>" readonly><br>
 
-            <label for="dater-age">Dater Age</label>
-            <input type="text" id="dater-age" name="dater-age" value="" readonly>
+            <!-- Opposite Profile -->
+            <h2>Opposite Profile</h2>
+            <label for="oppositeProfileName">Opposite Profile Name</label>
+            <input type="text" id="oppositeProfileName" name="oppositeProfileName" value="<?php echo $bookingDetails['oppositeProfile']['name']; ?>" readonly><br>
 
-            <label for="dater-gender">Dater Gender</label>
-            <input type="text" id="dater-gender" name="dater-gender" value="" readonly>
+            <label for="oppositeProfileAge">Opposite Profile Age</label>
+            <input type="text" id="oppositeProfileAge" name="oppositeProfileAge" value="<?php echo $bookingDetails['oppositeProfile']['age']; ?>" readonly><br>
 
-            <label for="dater-address">Dater Address</label>
-            <input type="text" id="dater-address" name="dater-address" value="" readonly>
+            <label for="oppositeProfileGender">Opposite Profile Gender</label>
+            <input type="text" id="oppositeProfileGender" name="oppositeProfileGender" value="<?php echo $bookingDetails['oppositeProfile']['gender']; ?>" readonly><br>
 
-            <button type="submit" class="btn-submit">Send Request</button>
-            <button class="btn-submit"><a href="newModal.php" >Back To Matching</a></button>
-            <button class="btn-submit"><a href="index.php" >Back To Home</a></button>
+            <label for="oppositeProfileAddress">Opposite Profile Address</label>
+            <input type="text" id="oppositeProfileAddress" name="oppositeProfileAddress" value="<?php echo $bookingDetails['oppositeProfile']['address']; ?>" readonly><br>
+
+            <!-- <label for="oppositeProfileImage">Opposite Profile Image URL</label>
+            <input type="text" id="oppositeProfileImage" name="oppositeProfileImage" value="<?php echo $bookingDetails['oppositeProfile']['image']; ?>" readonly><br> -->
+            <img src="<?php echo $bookingDetails['oppositeProfile']['image']; ?>" alt="Opposite Profile Image" style="width: 200px; height: 200px; object-fit: cover; border-radius: 8px;">
+
+             
+
+            <button type="submit">Confirm Booking</button>
         </form>
-    </div>
-
-    <?php
-    if (isset($message)) {
-        echo "<script>
-            Swal.fire({
-                title: 'Success!',
-                text: '$message',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
-        </script>";
-    }
-    ?>
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.20/dist/sweetalert2.all.min.js"></script>
+   
 </body>
-</html>
 <style>
-    .btn-submit a{
-        color: white;
-        text-decoration: none;
+    /* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+    display: flex;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    background: #fff;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin-top: 40px;
+}
+input{
+    display: readonly;
+}
+#reviewForm{
+    width: 70%;
+    margin: auto;
+}
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #5aa15e;
+    font-size: 1.5rem;
+    margin-top: 20px;
+}
+
+h3 {
+    font-size: 1.25rem;
+    margin-top: 10px;
+    color: #333;
+}
+
+/* Form Section Styling */
+.form-section {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #444;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+    font-size: 1rem;
+    color: #333;
+}
+
+input:focus,
+textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+}
+
+textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+/* Readonly Fields Styling */
+.readonly {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+/* Button Styling */
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .container {
+        padding: 20px;
     }
-    .btn-submit{
-        gap:2px !important;
-        padding: 11px;
-        font-size: 16px;
+
+    h1 {
+        font-size: 1.5rem;
     }
+
+    input,
+    textarea {
+        font-size: 0.9rem;
+    }
+
+    button {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 1.3rem;
+    }
+
+    .container {
+        padding: 15px;
+    }
+}
+
 </style>
+</html>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const bookingDetails = JSON.parse(sessionStorage.getItem('bookingDetails'));
+
+        if (bookingDetails) {
+            document.getElementById('movieName').value = bookingDetails.movie.name;
+            document.getElementById('movieDescription').value = bookingDetails.movie.description;
+            document.getElementById('movieImage').value = bookingDetails.movie.image;
+            document.getElementById('movieId').value = bookingDetails.movie.id;
+
+            document.getElementById('userProfileName').value = bookingDetails.userProfile.name;
+            document.getElementById('userProfileAge').value = bookingDetails.userProfile.age;
+            document.getElementById('userProfileGender').value = bookingDetails.userProfile.gender;
+            document.getElementById('userProfileAddress').value = bookingDetails.userProfile.address;
+            document.getElementById('userProfileImage').value = bookingDetails.userProfile.image;
+
+            document.getElementById('oppositeProfileName').value = bookingDetails.oppositeProfile.name;
+            document.getElementById('oppositeProfileAge').value = bookingDetails.oppositeProfile.age;
+            document.getElementById('oppositeProfileGender').value = bookingDetails.oppositeProfile.gender;
+            document.getElementById('oppositeProfileAddress').value = bookingDetails.oppositeProfile.address;
+            document.getElementById('oppositeProfileImage').value = bookingDetails.oppositeProfile.image;
+        }
+    });
+</script>

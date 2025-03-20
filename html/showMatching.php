@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['user'])) {
-    header("Location: CustLogin.php");
+    header("Location: VenderLogin.php");
     exit();
 }
 $user = $_SESSION['user'];
@@ -16,7 +16,7 @@ $stmt = $conn->prepare($query);
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
-$logo = "default.png"; 
+$logo = "default.png";
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
@@ -26,7 +26,7 @@ if ($result->num_rows > 0) {
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profileImage'])) {
     $targetDir = "logo/";
     if (!is_dir($targetDir)) {
-        mkdir($targetDir, 0777, true); 
+        mkdir($targetDir, 0777, true);
     }
 
     if ($logo !== "default.png" && file_exists($logo)) {
@@ -41,14 +41,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profileImage'])) {
     if (in_array($fileType, $allowedTypes)) {
         if (move_uploaded_file($_FILES["profileImage"]["tmp_name"], $targetFilePath)) {
 
-        
+
             $updateQuery = "UPDATE customer_reg SET image=? WHERE email=?";
             $updateStmt = $conn->prepare($updateQuery);
             $updateStmt->bind_param("ss", $targetFilePath, $email);
             if ($updateStmt->execute()) {
                 $_SESSION['user']['image'] = $targetFilePath;
                 $_SESSION['success'] = "Profile image uploaded successfully.";
-                
+
                 header("Location: customerProfile.php");
                 exit();
             } else {
@@ -60,6 +60,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profileImage'])) {
     } else {
         $_SESSION['error'] = "Invalid file format. Only JPG, PNG, or GIF allowed.";
     }
+}
+
+
+
+
+include("db.php");
+
+$sql = "SELECT * FROM bookings WHERE user_email=?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$resultt = $stmt->get_result();
+
+if ($resultt->num_rows > 0) {
+    $row = $resultt->fetch_assoc();
+    $uid = $row['user_Details'];
+    $oppo = $row['opposite'];
+    $mov = $row['movie_id'];
+
+    // Fetch movie details
+    $movee = "SELECT * FROM movie_details WHERE id=?";
+    $stmt = $conn->prepare($movee);
+    $stmt->bind_param("i", $mov);
+    $stmt->execute();
+    $resu = $stmt->get_result();
+
+    if ($resu->num_rows > 0) {
+        $ror = $resu->fetch_assoc();
+
+        // Fetch opposite profile details
+        $opp = "SELECT * FROM customer_reg WHERE id=?";
+        $stmt->prepare($opp);
+        $stmt->bind_param("i", $oppo);
+        $stmt->execute();
+        $oresult = $stmt->get_result();
+
+        if ($oresult->num_rows > 0) {
+            $orow = $oresult->fetch_assoc();
+        } else {
+            $orow = null;
+        }
+    } else {
+        $ror = null;
+    }
+} else {
+    $row = null;
+    $ror = null;
+    $orow = null;
 }
 
 ?>
@@ -83,13 +131,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profileImage'])) {
 </head>
 
 <body>
-   
+
 
 
     <!-- ...this is profile details..-->
-    <h2 id="h2">Customer Profile</h2>
+    <h1 id="else">Show Request</h1>
     <div class="profile">
-    <div class="profile-left">
+        <div class="profile-left">
             <div class="logo" onclick="document.getElementById('fileInput').click();">
                 <img src="<?php echo htmlspecialchars($logo); ?>" id="profileImage" alt="Profile Image">
                 <span class="edit-icon" onclick="document.getElementById('fileInput').click();">&#9998;</span>
@@ -97,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profileImage'])) {
             <form id="uploadForm" method="POST" enctype="multipart/form-data">
                 <input type="file" name="profileImage" id="fileInput" accept="image/*" onchange="uploadImage()">
             </form>
-     
+
 
             <ul>
                 <li><a href="CustomerProfile.php">Dashboard</a></li>
@@ -112,24 +160,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profileImage'])) {
 
         </div>
         <div class="details">
-            <div class="first">
-                <p><strong>ID:</strong> <?php echo htmlspecialchars($user['id']); ?></p>
-                <p><strong>Name:</strong> <?php echo htmlspecialchars($user['Customer_Name']); ?></p>
-                <p><strong>Address:</strong> <?php echo htmlspecialchars($user['Address']); ?></p>
-            </div>
-            <div class="second">
-                <p><strong>Contact No:</strong> <?php echo htmlspecialchars($user['mobile']); ?></p>
-                <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
-            </div>
+            <?php if ($row && $ror && $orow): ?>
+                <table border="1">
+                    <tr>
+                        <th>Movie Id</th>
+                        <th>Movie Name</th>
+                        <th>Movie Description</th>
+                        <th>Customer Id</th>
+                        <th>Customer Name</th>
+                        <th>Gender</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                    
+                        <td><?php echo htmlspecialchars($ror['id']); ?></td>
+                        <td><?php echo htmlspecialchars($ror['Name']); ?></td>
+                        <td><textarea disabled rows="4"
+                                cols="50"><?php echo htmlspecialchars($ror['movie_details']); ?></textarea></td>
+
+
+                        <td><?php echo htmlspecialchars($orow['id']); ?></td>
+                        <td><?php echo htmlspecialchars($orow['Customer_Name']); ?></td>
+                        <td><?php echo htmlspecialchars($orow['Gender']); ?></td>
+                        <td><?php echo htmlspecialchars($row['Status']); ?></td>
+                    </tr>
+                </table>
+            <?php else: ?>
+                <h2 id="else">No Dating are Founds</h2>
+            <?php endif; ?>
         </div>
 
 
     </div>
     <!--.........................footer is here-->
 
-   <?php 
-   include("footer.php");
-   ?>
+    <?php
+    include("footer.php");
+    ?>
 </body>
 
 </html>
@@ -142,7 +209,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profileImage'])) {
         background-color: #f4f4f9;
         color: #333;
     }
-
+    #else{
+        text-align: center;
+    }
     .container {
         max-width: 600px;
         margin: 50px auto;
@@ -159,8 +228,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profileImage'])) {
         /* padding: 20px; */
     }
 
+    textarea {
+        color: black !important;
+    }
+
+    table {
+        margin-left: 1%;
+        width: 98%;
+        margin-right: 1%;
+        text-align: center;
+    }
+
     .details {
-        display: flex;
+        /* display: flex; */
         justify-content: space-between;
         margin-bottom: 10px;
         width: 85%;
@@ -211,9 +291,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profileImage'])) {
         /* padding: 10px; */
         width: 15%;
     }
+
     .profile-left ul {
         margin-top: 10px;
     }
+
     .profile-left ul li {
         /* list-style-type: none;
         align-items: center;
@@ -257,22 +339,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profileImage'])) {
         height: 90%;
         margin-left: 28%;
     }
-
     .edit-icon {
         position: absolute;
-        bottom: 10px;
-        right: 10px;
-        background: rgba(0, 0, 0, 0.6);
-        color: white;
-        padding: 5px;
-        border-radius: 50%;
-        cursor: pointer;
         display: none;
         font-size: 16px;
+        top: 0px;
+        cursor: pointer;
+        border-radius: 100%;
+        width: 100%;
+        height: 94%;
+        text-align: center;
+        margin-left: 40%;
+        top: 10px;
+        font-size: 22px;
+        background: #968b8b;
+        width: 38%;
     }
+
 
     .logo:hover .edit-icon {
         display: block;
+        right: 36%;
+        top: 0px;
     }
 
     #fileInput {
@@ -281,28 +369,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profileImage'])) {
 </style>
 
 <script>
-        function uploadImage() {
-            document.getElementById('uploadForm').submit();
-        }
+    function uploadImage() {
+        document.getElementById('uploadForm').submit();
+    }
 
-        <?php if (isset($_SESSION['success'])) { ?>
-            Swal.fire({
-                title: 'Profile Updated',
-                text: '<?php echo $_SESSION['success']; ?>',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            })
-            // .then(() => {
-            //     window.location.href = 'customerLogin.php';
-            // });
-        <?php unset($_SESSION['success']); } ?>
+    <?php if (isset($_SESSION['success'])) { ?>
+        Swal.fire({
+            title: 'Profile Updated',
+            text: '<?php echo $_SESSION['success']; ?>',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        })
+        // .then(() => {
+        //     window.location.href = 'customerLogin.php';
+        // });
+        <?php unset($_SESSION['success']);
+    } ?>
 
-        <?php if (isset($_SESSION['error'])) { ?>
-            Swal.fire({
-                title: 'Error',
-                text: '<?php echo $_SESSION['error']; ?>',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        <?php unset($_SESSION['error']); } ?>
-    </script>
+    <?php if (isset($_SESSION['error'])) { ?>
+        Swal.fire({
+            title: 'Error',
+            text: '<?php echo $_SESSION['error']; ?>',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+        <?php unset($_SESSION['error']);
+    } ?>
+</script>
