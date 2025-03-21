@@ -118,72 +118,73 @@ $conn->close();
         }
 
 
-    //     function updateMovie(movie, container) {
-    //         container.innerHTML = `
-    //     <img src="${movie.m_image}" alt="Movie Image">
-    //     <h2>${movie.Name}</h2>
-    //     <h4>Description</h4>
-    //     <p>${movie.movie_details}</p>
-    //     <p>id.${movie.id}</p>
-    //     <button onclick="fetchContent('getRandomMovie', document.querySelector('#movie-info'), updateMovie)">
-    //         Get Random Movie
-    //     </button>
-    //     <button id="confirm_book">Confirm Booking</button>
-    // `;
-    //     }
-
-    //     function updateProfile(profile, container) {
-    //         container.innerHTML = `
-    //     <img src="${profile.image}" alt="Profile Image" style="height: 200px; width: 200px;">
-    //     <p>Name: ${profile.Customer_Name}</p>
-    //     <p>Age: ${profile.Age ?? '-'}</p>
-    //     <p>Gender: ${profile.Gender ?? '-'}</p>
-    //     <p>Address: ${profile.Address ?? '-'}</p>
-    //     <p>Id: ${profile.id ?? '-'}</p>
-    //     <button onclick="fetchContent('getAnotherProfile', document.querySelector('.right-section'), updateProfile)">
-    //         Another
-    //     </button>
-    // `;
-
-
-
-    //     }
-
-
-
-    function storeBookingDetailsAndRedirect() {
-    // Create an object with the necessary data
-    const bookingDetails = {
-        movie: {
-            name: "<?php echo htmlspecialchars($movie['Name']); ?>",
-            image: "<?php echo htmlspecialchars($movie['m_image']); ?>",
-            description: "<?php echo htmlspecialchars($movie['movie_details']); ?>",
-            id: "<?php echo $movie['id'] ?? '-'; ?>"
-        },
-        userProfile: {
-            name: "<?php echo htmlspecialchars($amit['Customer_Name']); ?>",
-            age: "<?php echo $amit['Age'] ?? '-'; ?>",
-            gender: "<?php echo $amit['Gender'] ?? '-'; ?>",
-            address: "<?php echo $amit['Address'] ?? '-'; ?>",
-            uid: "<?php echo $amit['id'] ?? '-'; ?>",
-            image: "<?php echo htmlspecialchars($amit['image']); ?>"
-        },
-        oppositeProfile: {
-            name: "<?php echo htmlspecialchars($oppositeProfile['Customer_Name']); ?>",
-            age: "<?php echo $oppositeProfile['Age'] ?? '-'; ?>",
-            gender: "<?php echo $oppositeProfile['Gender'] ?? '-'; ?>",
-            address: "<?php echo $oppositeProfile['Address'] ?? '-'; ?>",
-            oid: "<?php echo $oppositeProfile['id'] ?? '-'; ?>",
-            image: "<?php echo htmlspecialchars($oppositeProfile['image']); ?>"
+        function updateMovie(movie, container) {
+            container.innerHTML = `
+        <img src="${movie.m_image}" alt="Movie Image">
+        <h2>${movie.Name}</h2>
+        <h4>Description</h4>
+        <p>${movie.movie_details}</p>
+        <p>id.${movie.id}</p>
+        <button onclick="fetchContent('getRandomMovie', document.querySelector('#movie-info'), updateMovie)">
+            Get Random Movie
+        </button>
+        <button id="confirm_book">Confirm Booking</button>
+    `;
         }
-    };
 
-    // Store the booking details object in sessionStorage
-    sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+        function updateProfile(profile, container) {
+            container.innerHTML = `
+        <img src="${profile.image}" alt="Profile Image" style="height: 200px; width: 200px;">
+        <p>Name: ${profile.Customer_Name}</p>
+        <p>Age: ${profile.Age ?? '-'}</p>
+        <p>Gender: ${profile.Gender ?? '-'}</p>
+        <p>Address: ${profile.Address ?? '-'}</p>
+        <p>Id: ${profile.id ?? '-'}</p>
+        <p>Email: ${profile.email ?? '-'}</p>
+        <button onclick="fetchContent('getAnotherProfile', document.querySelector('.right-section'), updateProfile)">
+            Another
+        </button>
+    `;
 
-    // Redirect to ReviewBooking.php
-    window.location.href = 'ReviewBooking.php';
-}
+
+
+        }
+
+
+
+    // function storeBookingDetailsAndRedirect() {
+    // // Create an object with the necessary data
+    // const bookingDetails = {
+    //     movie: {
+    //         name: "?php echo htmlspecialchars($movie['Name']); ?>",
+    //         image: "?php echo htmlspecialchars($movie['m_image']); ?>",
+    //         description: "?php echo htmlspecialchars($movie['movie_details']); ?>",
+    //         id: "?php echo $movie['id'] ?? '-'; ?>"
+    //     },
+    //     userProfile: {
+    //         name: "?php echo htmlspecialchars($amit['Customer_Name']); ?>",
+    //         age: "?php echo $amit['Age'] ?? '-'; ?>",
+    //         gender: "?php echo $amit['Gender'] ?? '-'; ?>",
+    //         address: "?php echo $amit['Address'] ?? '-'; ?>",
+    //         uid: "?php echo $amit['id'] ?? '-'; ?>",
+    //         image: "?php echo htmlspecialchars($amit['image']); ?>"
+    //     },
+    //     oppositeProfile: {
+    //         name: "?php echo htmlspecialchars($oppositeProfile['Customer_Name']); ?>",
+    //         age: "?php echo $oppositeProfile['Age'] ?? '-'; ?>",
+    //         gender: "?php echo $oppositeProfile['Gender'] ?? '-'; ?>",
+    //         address: "?php echo $oppositeProfile['Address'] ?? '-'; ?>",
+    //         oid: "?php echo $oppositeProfile['id'] ?? '-'; ?>",
+    //         image: "?php echo htmlspecialchars($oppositeProfile['image']); ?>"
+    //     }
+    // };
+
+    // // Store the booking details object in sessionStorage
+    // sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+
+    // // Redirect to ReviewBooking.php
+    // window.location.href = 'ReviewBooking.php';
+// }
 
     </script>
 </head>
@@ -236,13 +237,14 @@ $conn->close();
             <div class="container">
                 <?php if ($isSessionActive): ?>
                     <div class="left-section">
-                        <img src="<?php echo htmlspecialchars($amit['image']); ?>" alt="Profile Image"
-                            style="height: 200px; width: 200px;">
+                        <img src="<?php echo htmlspecialchars($amit['image']); ?>" alt="Profile Image" style="height: 200px; width: 200px;">
                         <p>Name: <?php echo htmlspecialchars($amit['Customer_Name']); ?></p>
                         <p>Age: <?php echo $amit['Age'] ?? '-'; ?></p>
                         <p>Gender: <?php echo $amit['Gender'] ?? '-'; ?></p>
                         <p>Address: <?php echo $amit['Address'] ?? '-'; ?></p>
-                        <p>id: <?php echo $amit['id'] ?? '-'; ?></p>
+                        <p>Uid: <?php echo $amit['id'] ?? '-'; ?></p>
+                        <p>Email: <?php echo $amit['email'] ?? '-'; ?></p>
+
                     </div>
 
                     <div class="center-section">
@@ -251,13 +253,11 @@ $conn->close();
                             <h3><?php echo htmlspecialchars($movie['Name']); ?></h3>
                             <h4>Description</h4>
                             <p><?php echo htmlspecialchars($movie['movie_details']); ?></p>
-                            <p>id: <?php echo $amit['id'] ?? '-'; ?></p>
+                            <p>Mid: <?php echo $movie['id'] ?? '-'; ?></p>
 
-                            <button
-                                onclick="fetchContent('getRandomMovie', document.querySelector('#movie-info'), updateMovie)">
-                                Get Random Movie
-                            </button>
-                            <button id="confirm_book" onclick="storeBookingDetailsAndRedirect()">Confirm Booking</button>
+                            <button onclick="fetchContent('getRandomMovie', document.querySelector('#movie-info'), updateMovie)">Get Random Movies</button>
+                            <button id="confirm_book" onclick="confirmBooking()">Confirm Booking</button>
+                            <!-- <button id="confirm_book" onclick="storeBookingDetailsAndRedirect()">Confirm Booking</button> -->
 
                         </div>
                     </div>
@@ -269,7 +269,8 @@ $conn->close();
                         <p>Age: <?php echo $oppositeProfile['Age'] ?? '-'; ?></p>
                         <p>Gender: <?php echo $oppositeProfile['Gender'] ?? '-'; ?></p>
                         <p>Address: <?php echo $oppositeProfile['Address'] ?? '-'; ?></p>
-                        <p>id: <?php echo $amit['id'] ?? '-'; ?></p>
+                        <p>oid: <?php echo $oppositeProfilet['id'] ?? '-'; ?></p>
+                        <p>oid: <?php echo $oppositeProfile['email'] ?? '-'; ?></p>
 
                         <button
                             onclick="fetchContent('getAnotherProfile', document.querySelector('.right-section'), updateProfile)">
@@ -331,6 +332,59 @@ $conn->close();
         });
     </script>
 
-</body>
 
+<script>
+    function confirmBooking() {
+
+    const userId = <?php echo json_encode($amit['id'] ?? ''); ?>;
+    const userEmail = <?php echo json_encode($amit['email'] ?? ''); ?>;
+    const oppositeUserId = <?php echo json_encode($oppositeProfile['id'] ?? ''); ?>;
+    const oppositeEmail = <?php echo json_encode($oppositeProfile['email'] ?? ''); ?>;
+    const movieId = <?php echo json_encode($movie['id'] ?? ''); ?>; 
+    const data = {
+        user_id: userId,
+        user_email: userEmail,
+        opposite_user_id: oppositeUserId,
+        opposite_email:oppositeEmail,
+        movie_id: movieId
+    };
+
+    fetch('save_booking.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                    title: 'Success!',
+                    text: 'Your request has been submitted Wait for Confirmation ',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                })
+        } else {
+            Swal.fire({
+                    title: 'Error',
+                    text: 'Something went wrong',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                })
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+                    title: 'Error',
+                    text: 'database connection has been disabled',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                })
+    });
+}
+
+</script>
+</body>
 </html>

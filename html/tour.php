@@ -493,8 +493,8 @@
         <div class="navbar">
             <a href="index.php">Home</a>
             <a href="datingAdvance.php">Dating Advice</a>
-            <a href="#">Singles Near Me</a>
-            <a href="#">Log in</a>l
+            <a href="singlesNear.php">Singles Near Me</a>
+            <a href="CustLogin.php">Log in</a>
         </div>
     </div>
 

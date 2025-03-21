@@ -172,7 +172,7 @@
             <section id="paragraph">
                 <p>What happens when you apply scientific research to dating behavior? A whole lotta love! But this
                     isn’t destiny, it’s deliberate. That’s why every 14 minutes, someone finds love on eharmony.</p>
-                <button>Join Now</button>
+                <button><a href="newModal.php">Join Now</a></button>
             </section>
         </div>
     </div>
@@ -187,7 +187,8 @@
                 <p>What happens when you apply scientific research to dating behavior? A whole lotta love! But this
                     isn’t destiny, it’s deliberate. That’s why every 14 minutes, someone finds love on eharmony. this
                     page has made by PSS techno services noida Sector 63</p>
-                <button>Join Now</button>
+                    <button><a href="newModal.php">Join Now</a></button>
+
             </section>
             <section id="c-image"><img
                     src="https://www.eharmony.com/wplp/wp-content/uploads/sites/5/2023/11/compatibillity-score.png"
@@ -226,7 +227,8 @@
                     lasting
                     love. Give us a try when you’re ready for something real.
                 </p>
-                <button>Jion Now</button>
+                <button><a href="newModal.php">Join Now</a></button>
+
             </section>
         </div>
     </div>
