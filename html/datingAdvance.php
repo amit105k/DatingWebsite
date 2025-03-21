@@ -14,6 +14,26 @@
         href="https://fonts.googleapis.com/css2?family=Arima:wght@100..700&family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=Dancing+Script:wght@400..700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
     <style>
+          .navbar {
+        width: 100%;
+        background-color: #333;
+        padding: 20px 0;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .navbar a {
+        text-decoration: none;
+        color: white;
+        margin: 0 15px;
+        font-size: 22px;
+
+    }
+
+    .navbar a:hover {
+        color: orange;
+    }
+
         .mm-coursel {
             font-family: Arial, sans-serif;
             display: flex;
@@ -30,6 +50,7 @@
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
+            margin-top: 10px;
         }
 
         .m-carousel-item {
@@ -249,9 +270,14 @@
 </head>
 
 <body>
-    <?php
-    include("header.php");
-    ?>
+<?php include("header.php") ?>
+    <div class="navbar">
+        <a href="index.php">Home</a>
+        <a href="tour.php">Tour</a>
+        <a href="datingAdvance.php">Dating Advice</a>
+        <a href="singlesNear.php">Singles Near Me</a>
+        <a href="CustLogin.php">Log in</a>
+    </div>
     <div class="mm-coursel">
         <div class="m-carousel">
             <div class="m-carousel-item" style="display: block;">

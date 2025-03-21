@@ -143,32 +143,6 @@ html {
 }
 
 
-.navbar {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    padding: 20px 50px;
-    /* background: rgba(0, 0, 0, 0.5); */
-    color: #fff;
-    font-size: 18px;
-    z-index: 2;
-}
-
-.navbar a {
-    margin-left: 30px;
-    color: #fff;
-    text-decoration: none;
-    transition: color 0.3s;
-    font-weight: bolder;
-    font-size: 22px;
-}
-
-.navbar a:hover {
-    color: #ffa500;
-}
-
 .content {
     position: relative;
     /* z-index: 1; */

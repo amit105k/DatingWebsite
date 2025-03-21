@@ -182,9 +182,12 @@ if ($resultt->num_rows > 0) {
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $resultt = $stmt->get_result();
+            $found = false; 
 
             if ($resultt->num_rows > 0) {
                 while ($row = $resultt->fetch_assoc()) {
+                    if ($row['Status'] == 'pending') {
+                        $found = true; 
                     $uid = $row['user_Details'];
                     $oppo = $row['opposite'];
                     $mov = $row['movie_id'];
@@ -215,12 +218,16 @@ if ($resultt->num_rows > 0) {
                     echo "<td>" . ($row['Status']) . "</td>";
 
                     echo "</tr>";
+                }}
+                if (!$found) {
+                    echo "<tr><td colspan='8'>No Request Send by You</td></tr>";
                 }
-            } else {
-                echo "<tr><td colspan='8'>No bookings found for this user</td></tr>";
-            }
+            
+        } else {
+            echo "<tr><td colspan='8'>No Request found for You</td></tr>";
+        }
 
-            echo '</table>';
+        echo '</table>';
             ?>
 
         </div>

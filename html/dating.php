@@ -182,12 +182,12 @@ if ($resultt->num_rows > 0) {
     $stmt->execute();
     $resultt = $stmt->get_result();
 
-    $found = false; // Flag to track if any accepted bookings are found
+    $found = false; 
 
     if ($resultt->num_rows > 0) {
         while ($row = $resultt->fetch_assoc()) {
-            if ($row['Status'] == 'Accepted') { // Check if status is "Accepted"
-                $found = true; // Mark as found
+            if ($row['Status'] == 'Accepted') {
+                $found = true; 
                 $uid = $row['user_Details'];
                 $oppo = $row['opposite'];
                 $mov = $row['movie_id'];
@@ -220,12 +220,11 @@ if ($resultt->num_rows > 0) {
             }
         }
 
-        // If no "Accepted" status was found, show "No matching found"
         if (!$found) {
             echo "<tr><td colspan='8'>No accepted bookings found for this user</td></tr>";
         }
     } else {
-        echo "<tr><td colspan='8'>No bookings found for this user</td></tr>";
+        echo "<tr><td colspan='8'>No accepted bookings found for this user</td></tr>";
     }
 
     echo '</table>';

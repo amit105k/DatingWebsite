@@ -27,19 +27,22 @@
 <!---------------------end of scrop----------------------------------------------------------->
 
 <body>
-
+<?php 
+    include("header2.php");
+?>
     <!-- header are here-->
     <?php
     include("header.php");
     ?>
     <!--- slider are here--------->
     <div class="background"></div>
-    <div class="navbar">
+    <!-- <div class="navbar">
+        <a href="index.php">Home</a>
         <a href="tour.php">Tour</a>
         <a href="datingAdvance.php">Dating Advice</a>
-        <a href="#">Singles Near Me</a>
+        <a href="singlesNear.php">Singles Near Me</a>
         <a href="CustLogin.php">Log in</a>
-    </div>
+    </div> -->
     <div class="content">
         <h1>MovieMingle</h1>
         <h1>Get Who Gets You</h1>
@@ -55,7 +58,7 @@
     <section class="hero">
         <h1>Find Your Movie Match 🎞️</h1>
         <p>Discover people who love the same movies as you!</p>
-        <button class="btn" ><a href="newModal.php">Get Started</a></button>
+        <button class="btn"><a href="newModal.php">Get Started</a></button>
     </section>
     <!--dating ----->
     <div class="flex justify-center items-center">
@@ -187,7 +190,7 @@
                 <p>What happens when you apply scientific research to dating behavior? A whole lotta love! But this
                     isn’t destiny, it’s deliberate. That’s why every 14 minutes, someone finds love on eharmony. this
                     page has made by PSS techno services noida Sector 63</p>
-                    <button><a href="newModal.php">Join Now</a></button>
+                <button><a href="newModal.php">Join Now</a></button>
 
             </section>
             <section id="c-image"><img

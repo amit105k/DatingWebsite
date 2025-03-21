@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Registration</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="../css/header.css">
+    <!-- <link rel="stylesheet" href="../css/header.css"> -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
@@ -137,105 +137,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         background-color: #45a049;
     }
 
-    .dropdown {
-        position: relative;
-        display: inline-block;
-        text-transform: lowercase;
-    }
-
-    .dropdown button {
-        background-color: black;
-        color: white;
-        /* background-color:  pink; */
-    }
-
-    .dropdown button:hover {
-        color: orange;
-    }
-
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-        z-index: 1;
-        min-width: 200px;
-    }
-
-    .sub-dropdown {
-        background-color: black !important;
-    }
-
-    .sub-dropdown:hover {
-        background-color: #f1f1f1;
-    }
-
-    .dropdown-content a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-    }
-
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
-
-    .dropdown-content .sub-dropdown {
-        position: relative;
-    }
-
-    .dropdown-content .sub-dropdown-content {
-        display: none;
-        position: absolute;
-        left: -97%;
-        top: 0;
-        background-color: #f9f9f9;
-        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-        min-width: 200px;
-    }
-
-    :root {
-        --aman: black;
-    }
-
-    .dropdown-content .sub-dropdown:hover .sub-dropdown-content {
-        display: block;
-        background: red !important;
-        /* background: var(--aman); */
-        /* background-color:var(--main-color); */
-    }
-
-    .sub-dropdown a {
-        text-transform: none;
-    }
-
-    .navbar {
-        /* position: absolute; */
-        top: 0;
-        background-color: black;
-        /* width: 100%; */
-        display: flex;
-        /* justify-content: flex-end; */
-        padding: 20px 50px;
-        /* background: rgba(0, 0, 0, 0.5); */
-        color: #fff;
-        font-size: 18px;
-        z-index: 2;
-    }
-
-    .navbar a {
-        margin-left: 30px;
-        color: #fff;
-        text-decoration: none;
-        transition: color 0.3s;
-        font-weight: bolder;
-        font-size: 22px;
-    }
-
-    .navbar a:hover {
-        color: #ffa500;
-    }
 </style>
 </head>
 
@@ -243,27 +144,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 
 
-    <div class="navbar">
-        <a href="index.php">Home</a>
-        <a href="tour.php">Tour</a>
-        <a href="datingAdvance.php">Dating Advice</a>
-        <a href="#">Singles Near Me</a>
-        <div class="dropdown">
-            <a href="">REGISTER / LOGIN</a>
-            <div class="dropdown-content">
-                <div class="sub-dropdown">
-                    <a href="./CustReg.php">Register</a>
+<?php 
+    include("header2.php");
+?>
 
-                </div>
-                <div class="sub-dropdown">
-                    <a href="./CustLogin.php">Login</a>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--..................drop down is here-->
 
 
 
