@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['user'])) {
-    header("Location: VenderLogin.php");
+    header("Location: CustLogin.php");
     exit();
 }
 $user = $_SESSION['user'];
@@ -66,10 +66,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profileImage'])) {
 
 
 include("db.php");
-$oppo=
-$sql = "SELECT * FROM bookings WHERE opposite=?";
+
+$sql = "SELECT * FROM bookings WHERE user_email=?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $oppo);
+$stmt->bind_param("s", $email);
 $stmt->execute();
 $resultt = $stmt->get_result();
 
@@ -90,9 +90,9 @@ if ($resultt->num_rows > 0) {
         $ror = $resu->fetch_assoc();
 
         // Fetch opposite profile details
-        $opp = "SELECT * FROM bookings WHERE opposite=?";
+        $opp = "SELECT * FROM customer_reg WHERE id=?";
         $stmt->prepare($opp);
-        $stmt->bind_param("i", $user['id']);
+        $stmt->bind_param("i", $oppo);
         $stmt->execute();
         $oresult = $stmt->get_result();
 
@@ -135,7 +135,7 @@ if ($resultt->num_rows > 0) {
 
 
     <!-- ...this is profile details..-->
-    <h1 id="else">Show Request</h1>
+    <h1 id="else">Start You Journey</h1>
     <div class="profile">
         <div class="profile-left">
             <div class="logo" onclick="document.getElementById('fileInput').click();">
@@ -160,39 +160,78 @@ if ($resultt->num_rows > 0) {
 
         </div>
         <div class="details">
+    <?php
+    include("db.php");
 
-        <p><strong>ID:</strong> <?php echo htmlspecialchars($user['id']); ?></p>
+    // Start the HTML structure
+    echo '<table border="1" cellspacing="0" cellpadding="10">';
+    echo '<tr>
+            <th>Sr</th>
+            <th>Movie ID</th>
+            <th>Movie Title</th>
+            <th>Movie Description</th>
+            <th>Profile ID</th>
+            <th>Opposite Profile Name</th>
+            <th>Opposite Profile Email</th>
+            <th>Status</th>
+        </tr>';
 
-            <?php if ($row && $ror && $orow): ?>
-                <table border="1">
-                    <tr>
-                        <th>Movie Id</th>
-                        <th>Movie Name</th>
-                        <th>Movie Description</th>
-                        <th>Customer Id</th>
-                        <th>Customer Name</th>
-                        <th>Gender</th>
-                        <th>Status</th>
-                    </tr>
-                    <tr>
-                    <p><strong>ID:</strong> <?php echo htmlspecialchars($user['id']); ?></p>
+    $sql = "SELECT * FROM bookings WHERE user_email=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $resultt = $stmt->get_result();
 
-                        <td><?php echo htmlspecialchars($ror['id']); ?></td>
-                        <td><?php echo htmlspecialchars($ror['Name']); ?></td>
-                        <td><textarea disabled rows="4"
-                                cols="50"><?php echo htmlspecialchars($ror['movie_details']); ?></textarea></td>
+    $found = false; // Flag to track if any accepted bookings are found
 
+    if ($resultt->num_rows > 0) {
+        while ($row = $resultt->fetch_assoc()) {
+            if ($row['Status'] == 'Accepted') { // Check if status is "Accepted"
+                $found = true; // Mark as found
+                $uid = $row['user_Details'];
+                $oppo = $row['opposite'];
+                $mov = $row['movie_id'];
+                $sr = $row['id'];
 
-                        <td><?php echo htmlspecialchars($orow['id']); ?></td>
-                        <td><?php echo htmlspecialchars($orow['Customer_Name']); ?></td>
-                        <td><?php echo htmlspecialchars($orow['Gender']); ?></td>
-                        <td><?php echo htmlspecialchars($row['Status']); ?></td>
-                    </tr>
-                </table>
-            <?php else: ?>
-                <h2 id="else">No Dating are Founds</h2>
-            <?php endif; ?>
-        </div>
+                $movee = "SELECT * FROM movie_details WHERE id=?";
+                $stmt = $conn->prepare($movee);
+                $stmt->bind_param("i", $mov);
+                $stmt->execute();
+                $resu = $stmt->get_result();
+                $movie_data = $resu->fetch_assoc();
+
+                $opp = "SELECT * FROM customer_reg WHERE id=?";
+                $stmt->prepare($opp);
+                $stmt->bind_param("i", $oppo);
+                $stmt->execute();
+                $oresult = $stmt->get_result();
+                $opposite_data = $oresult->fetch_assoc();
+
+                echo "<tr>";
+                echo "<td>$sr</td>";
+                echo "<td>$mov</td>";
+                echo "<td>" . ($movie_data ? $movie_data['Name'] : 'N/A') . "</td>";
+                echo "<td>" . ($movie_data ? $movie_data['movie_details'] : 'N/A') . "</td>";
+                echo "<td>$mov</td>";
+                echo "<td>" . ($opposite_data ? $opposite_data['Customer_Name'] : 'N/A') . "</td>";
+                echo "<td>" . ($opposite_data ? $opposite_data['email'] : 'N/A') . "</td>";
+                echo "<td>" . ($row['Status']) . "</td>";
+                echo "</tr>";
+            }
+        }
+
+        // If no "Accepted" status was found, show "No matching found"
+        if (!$found) {
+            echo "<tr><td colspan='8'>No accepted bookings found for this user</td></tr>";
+        }
+    } else {
+        echo "<tr><td colspan='8'>No bookings found for this user</td></tr>";
+    }
+
+    echo '</table>';
+    ?>
+</div>
+
 
 
     </div>
@@ -213,9 +252,11 @@ if ($resultt->num_rows > 0) {
         background-color: #f4f4f9;
         color: #333;
     }
-    #else{
+
+    #else {
         text-align: center;
     }
+
     .container {
         max-width: 600px;
         margin: 50px auto;
@@ -343,6 +384,7 @@ if ($resultt->num_rows > 0) {
         height: 90%;
         margin-left: 28%;
     }
+
     .edit-icon {
         position: absolute;
         display: none;
@@ -371,32 +413,3 @@ if ($resultt->num_rows > 0) {
         display: none;
     }
 </style>
-
-<script>
-    function uploadImage() {
-        document.getElementById('uploadForm').submit();
-    }
-
-    <?php if (isset($_SESSION['success'])) { ?>
-        Swal.fire({
-            title: 'Profile Updated',
-            text: '<?php echo $_SESSION['success']; ?>',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        })
-        // .then(() => {
-        //     window.location.href = 'customerLogin.php';
-        // });
-        <?php unset($_SESSION['success']);
-    } ?>
-
-    <?php if (isset($_SESSION['error'])) { ?>
-        Swal.fire({
-            title: 'Error',
-            text: '<?php echo $_SESSION['error']; ?>',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
-        <?php unset($_SESSION['error']);
-    } ?>
-</script>

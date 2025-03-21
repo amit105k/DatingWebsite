@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['user'])) {
-    header("Location: VenderLogin.php");
+    header("Location: CustLogin.php");
     exit();
 }
 $user = $_SESSION['user'];
@@ -62,52 +62,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profileImage'])) {
     }
 }
 
+// update status into table
 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['status_action'])) {
+    $bookingId = $_POST['booking_id'];
+    $status = $_POST['status_action'];
 
-
-include("db.php");
-
-$sql = "SELECT * FROM bookings WHERE user_email=?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$resultt = $stmt->get_result();
-
-if ($resultt->num_rows > 0) {
-    $row = $resultt->fetch_assoc();
-    $uid = $row['user_Details'];
-    $oppo = $row['opposite'];
-    $mov = $row['movie_id'];
-
-    // Fetch movie details
-    $movee = "SELECT * FROM movie_details WHERE id=?";
-    $stmt = $conn->prepare($movee);
-    $stmt->bind_param("i", $mov);
-    $stmt->execute();
-    $resu = $stmt->get_result();
-
-    if ($resu->num_rows > 0) {
-        $ror = $resu->fetch_assoc();
-
-        // Fetch opposite profile details
-        $opp = "SELECT * FROM customer_reg WHERE id=?";
-        $stmt->prepare($opp);
-        $stmt->bind_param("i", $oppo);
-        $stmt->execute();
-        $oresult = $stmt->get_result();
-
-        if ($oresult->num_rows > 0) {
-            $orow = $oresult->fetch_assoc();
-        } else {
-            $orow = null;
-        }
+    $updateStatusQuery = "UPDATE bookings SET Status=? WHERE id=?";
+    $stmt = $conn->prepare($updateStatusQuery);
+    $stmt->bind_param("si", $status, $bookingId);
+    
+    if ($stmt->execute()) {
+        $_SESSION['success'] = "Status updated successfully.";
     } else {
-        $ror = null;
+        $_SESSION['error'] = "Failed to update status.";
     }
-} else {
-    $row = null;
-    $ror = null;
-    $orow = null;
 }
 
 ?>
@@ -135,7 +104,7 @@ if ($resultt->num_rows > 0) {
 
 
     <!-- ...this is profile details..-->
-    <h1 id="else">Show Request</h1>
+    <h1 id="else">Request Recieved</h1>
     <div class="profile">
         <div class="profile-left">
             <div class="logo" onclick="document.getElementById('fileInput').click();">
@@ -160,34 +129,74 @@ if ($resultt->num_rows > 0) {
 
         </div>
         <div class="details">
-            <?php if ($row && $ror && $orow): ?>
-                <table border="1">
-                    <tr>
-                        <th>Movie Id</th>
-                        <th>Movie Name</th>
-                        <th>Movie Description</th>
-                        <th>Customer Id</th>
-                        <th>Customer Name</th>
-                        <th>Gender</th>
-                        <th>Status</th>
-                    </tr>
-                    <tr>
-                    
-                        <td><?php echo htmlspecialchars($ror['id']); ?></td>
-                        <td><?php echo htmlspecialchars($ror['Name']); ?></td>
-                        <td><textarea disabled rows="4"
-                                cols="50"><?php echo htmlspecialchars($ror['movie_details']); ?></textarea></td>
+            <?php
+            include("db.php");
 
+            echo '<table border="1" cellspacing="0" cellpadding="10">';
+            echo '<tr>
+                    <th>Sr</th>
+                    <th>Movie ID</th>
+                    <th>Movie Title</th>
+                    <th>Movie Description</th>
+                    <th>Profile ID</th>
+                    <th>Profile Name</th>
+                    <th>Profile Email</th>
+                    <th>Status</th>
+                </tr>';
 
-                        <td><?php echo htmlspecialchars($orow['id']); ?></td>
-                        <td><?php echo htmlspecialchars($orow['Customer_Name']); ?></td>
-                        <td><?php echo htmlspecialchars($orow['Gender']); ?></td>
-                        <td><?php echo htmlspecialchars($row['Status']); ?></td>
-                    </tr>
-                </table>
-            <?php else: ?>
-                <h2 id="else">No Dating are Founds</h2>
-            <?php endif; ?>
+            $sql = "SELECT * FROM bookings WHERE opposite_email=?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $resultt = $stmt->get_result();
+
+            if ($resultt->num_rows > 0) {
+                while ($row = $resultt->fetch_assoc()) {
+                    $uid = $row['user_Details']; // left side id
+                    $oppo = $row['opposite'];  // oposiye ka id
+                    $mov = $row['movie_id'];
+                    $sr = $row['id']; // auto increnet sr number
+            
+                    $movee = "SELECT * FROM movie_details WHERE id=?";
+                    $stmt = $conn->prepare($movee);
+                    $stmt->bind_param("i", $mov);
+                    $stmt->execute();
+                    $resu = $stmt->get_result();
+                    $movie_data = $resu->fetch_assoc();
+
+                    $opp = "SELECT * FROM customer_reg WHERE id=?";
+                    $stmt->prepare($opp);
+                    $stmt->bind_param("i", $uid);
+                    $stmt->execute();
+                    $oresult = $stmt->get_result();
+                    $opposite_data = $oresult->fetch_assoc();
+
+                    echo "<tr>";
+                    echo "<td>$sr</td>";
+                    echo "<td>$mov</td>";
+                    echo "<td>" . ($movie_data ? $movie_data['Name'] : 'N/A') . "</td>";
+                    echo "<td>" . ($movie_data ? $movie_data['movie_details'] : 'N/A') . "</td>";
+
+                    echo "<td>$uid</td>";
+                    echo "<td>" . ($opposite_data ? $opposite_data['Customer_Name'] : 'N/A') . "</td>";
+                    echo "<td>" . ($opposite_data ? $opposite_data['email'] : 'N/A') . "</td>";
+                    echo "<td>
+                    <button class='accept-btn' data-booking-id='$sr'>Accept</button>
+                    <button class='reject-btn' data-booking-id='$sr'>Reject</button>
+                  </td>";
+
+            echo "</tr>";
+
+                    echo "</tr>";
+                    echo "</tr>";
+                }
+            } else {
+                echo "<tr><td colspan='8'>No Request found for You</td></tr>";
+            }
+
+            echo '</table>';
+            ?>
+
         </div>
 
 
@@ -197,11 +206,121 @@ if ($resultt->num_rows > 0) {
     <?php
     include("footer.php");
     ?>
-</body>
 
-</html>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+// Handle Accept button click with SweetAlert
+document.querySelectorAll('.accept-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const bookingId = this.getAttribute('data-booking-id');
+        
+        Swal.fire({
+            title: 'Confirm your dating',
+            showCancelButton: true,
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                updateStatus(bookingId, 'Accepted');
+            }
+        });
+    });
+});
+
+function updateStatus(bookingId, status) {
+    const formData = new FormData();
+    formData.append('status_action', status);
+    formData.append('booking_id', bookingId);
+
+    fetch('', { 
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        window.location.reload(); 
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+</script>
+
 
 <style>
+/************************************************88sweet aert for updare */
+.accept-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.accept-btn:hover {
+    background-color: #45a049;
+}
+
+.reject-btn {
+    background-color: #f44336;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.reject-btn:hover {
+    background-color: #e53935;
+}
+
+
+
+
+
+
+
+
+/*************************************************************** */
+    /* Accept Button */
+    .accept-btn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .accept-btn:hover {
+        background-color: #45a049;
+    }
+
+
+    .reject-btn {
+        background-color: #f44336;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .reject-btn:hover {
+        background-color: #e53935;
+    }
+
+
+    button {
+        margin-right: 8px;
+    }
+
     body {
         font-family: Arial, sans-serif;
         margin: 0;
@@ -209,9 +328,11 @@ if ($resultt->num_rows > 0) {
         background-color: #f4f4f9;
         color: #333;
     }
-    #else{
+
+    #else {
         text-align: center;
     }
+
     .container {
         max-width: 600px;
         margin: 50px auto;
@@ -339,6 +460,7 @@ if ($resultt->num_rows > 0) {
         height: 90%;
         margin-left: 28%;
     }
+
     .edit-icon {
         position: absolute;
         display: none;
@@ -368,31 +490,6 @@ if ($resultt->num_rows > 0) {
     }
 </style>
 
-<script>
-    function uploadImage() {
-        document.getElementById('uploadForm').submit();
-    }
 
-    <?php if (isset($_SESSION['success'])) { ?>
-        Swal.fire({
-            title: 'Profile Updated',
-            text: '<?php echo $_SESSION['success']; ?>',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        })
-        // .then(() => {
-        //     window.location.href = 'customerLogin.php';
-        // });
-        <?php unset($_SESSION['success']);
-    } ?>
-
-    <?php if (isset($_SESSION['error'])) { ?>
-        Swal.fire({
-            title: 'Error',
-            text: '<?php echo $_SESSION['error']; ?>',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
-        <?php unset($_SESSION['error']);
-    } ?>
-</script>
+</body>
+</html>
