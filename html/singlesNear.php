@@ -108,6 +108,7 @@
         padding: 20px 0;
         display: flex;
         justify-content: flex-end;
+        position: relative;
     }
 
     .navbar a {
